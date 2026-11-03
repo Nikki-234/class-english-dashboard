@@ -305,7 +305,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .overlay {
-  position: fixed; inset: 0;
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0;
   background: rgba(45,49,66,.28);
   backdrop-filter: blur(2px);
   opacity: 0; pointer-events: none;
@@ -467,7 +467,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ---- 身份选择幕 ---- */
 .gate {
-  position: fixed; inset: 0; z-index: 200;
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 200;
   background: var(--bg);
   display: flex; align-items: center; justify-content: center;
   padding: 24px;
@@ -652,7 +652,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .swatch.on { border-color: var(--ink); }
 .swatch.on::after {
-  content: ''; position: absolute; inset: 3px;
+  content: ''; position: absolute; top: 3px; right: 3px; bottom: 3px; left: 3px;
   border-radius: 50%; background: rgba(255,255,255,.55);
 }
 .seg-compact { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
@@ -874,9 +874,28 @@ body.theme-hd .roster thead th { font-size: 12.5px; }
 .week-history input:focus { outline: none; border-color: var(--ink-3); }
 .week-history .col-l { width: 52px; text-align: center; }
 
+
+/* === 兼容性说明 ===
+   本文件避免使用 inset 简写(Chrome 87+)与 flex gap(Chrome 84+),
+   以兼容较旧的 Chromium 内核浏览器(如 360Chrome 12.2 / Chrome 78)。
+   若确认目标浏览器较新,可改回 inset: 0 简写写法。 */
 </style>
 </head>
 <body>
+
+<!-- 身份选择幕 -->
+<div class="gate" id="gate">
+  <div class="gate-inner">
+    <h2>正在载入…</h2>
+    <p class="lead">请稍候</p>
+  </div>
+</div>
+
+<!-- 角色横幅 -->
+<div class="role-banner" id="roleBanner" hidden></div>
+
+<!-- 个人卡片(学生/家长) -->
+<div id="personalWrap" hidden></div>
 
 <div class="app" id="app" style="display:none">
 
@@ -969,21 +988,7 @@ body.theme-hd .roster thead th { font-size: 12.5px; }
     </table>
   </div>
 
-<!-- 身份选择幕 -->
-<div class="gate" id="gate">
-  <div class="gate-inner">
-    <h2>正在载入…</h2>
-    <p class="lead">请稍候</p>
-  </div>
 </div>
-
-<!-- 角色横幅 -->
-<div class="role-banner" id="roleBanner" hidden></div>
-
-<!-- 个人卡片(学生/家长) -->
-<div id="personalWrap" hidden></div>
-
-  </div>
 
   <div class="footer">
     数据来源:成绩表1.xlsx · 单文件 HTML · 编辑实时保存到 localStorage · 班级仪表盘 v1
@@ -1055,6 +1060,17 @@ body.theme-hd .roster thead th { font-size: 12.5px; }
   <button class="btn" id="settingsFloat">设置</button>
   <button class="btn" id="resetFloat">重置</button>
 </div>
+
+<!-- 个性化设置面板 -->
+<div class="settings" id="settings">
+  <div class="settings-head">
+    <h3>个性化设置</h3>
+    <button class="close" id="closeSettings" aria-label="关闭" style="position:static;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:17px;line-height:1;">×</button>
+  </div>
+  <div class="settings-body"></div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 'use strict';
@@ -2904,29 +2920,23 @@ function renderPanelOrderList(body) {
     enterApp();
   }
 
-  // 3. 绑定设置按钮
-  document.getElementById('settingsBtn').onclick = openSettings;
+  // 3. 绑定设置按钮(带 null 防御,元素缺失不阻断 boot)
+  const bind = function (id, fn) {
+    const el = document.getElementById(id);
+    if (el) { el.onclick = fn; }
+    else { console.warn('[dashboard] 元素不存在,跳过绑定:', id); }
+  };
+  bind('settingsBtn', openSettings);
   initPanelDrag();
-  document.getElementById('weekBadge').onclick = () => {
+  bind('weekBadge', function () {
     setWeek((Number(PREFS.week || 1) % WEEK_COUNT) + 1);
     refresh();
     toast('已切换到第 ' + PREFS.week + ' 周');
-  };
-  document.getElementById('settingsFloat').onclick = openSettings;
-  document.getElementById('closeSettings').onclick = closeSettings;
+  });
+  bind('settingsFloat', openSettings);
+  bind('closeSettings', closeSettings);
 })();
 </script>
-
-<!-- 个性化设置面板 -->
-<div class="settings" id="settings">
-  <div class="settings-head">
-    <h3>个性化设置</h3>
-    <button class="close" id="closeSettings" aria-label="关闭" style="position:static;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:17px;line-height:1;">×</button>
-  </div>
-  <div class="settings-body"></div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 </body>
 </html>
