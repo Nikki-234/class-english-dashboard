@@ -2,13 +2,16 @@
 
 > ### 🔗 在线访问
 >
-> | 通道 | 链接 |
-> |---|---|
-> | **GitHub Pages（官方）** | **https://nikki-234.github.io/class-english-dashboard/** |
-> | jsDelivr CDN（国内加速） | https://cdn.jsdelivr.net/gh/Nikki-234/class-english-dashboard@main/index.html |
-> | 仓库源码 | https://github.com/Nikki-234/class-english-dashboard |
+> | 通道 | 链接 | 说明 |
+> |---|---|---|
+> | **推荐 · jsDelivr 固定版本** | **https://cdn.jsdelivr.net/gh/Nikki-234/class-english-dashboard@7fc4bca4b3521e34cf800575ab24bcde5595bef7/index.html** | 国内访问稳定，锁定 commit 不会拿到旧缓存 |
+> | jsDelivr 备用节点 | https://gcore.jsdelivr.net/gh/Nikki-234/class-english-dashboard@7fc4bca4b3521e34cf800575ab24bcde5595bef7/index.html | 另一个 CDN 节点 |
+> | GitHub Pages（官方） | https://nikki-234.github.io/class-english-dashboard/ | 海外网络访问正常 |
+> | 仓库源码 | https://github.com/Nikki-234/class-english-dashboard | |
 >
 > 页面为**单文件 HTML**，教师可直接编辑数据、追踪每个学生的学习进度。
+>
+> **为什么推荐 jsDelivr 固定版本？** `github.io` 在部分国内网络下不稳定（会超时），而 jsDelivr 是 GitHub 官方认可的 CDN，线路通畅。链接里锁定 commit 哈希，确保任何时候打开都是最新版，不会读到尚未刷新的旧缓存。
 
 一个面向英语教师的**单文件 HTML 班级学情仪表盘生成工具**：准备好成绩表 xlsx，运行一条命令，即可生成功能完整的仪表盘网页——教师用浏览器打开即可编辑数据、追踪每个学生的学习进度。
 
