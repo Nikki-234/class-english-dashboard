@@ -694,6 +694,186 @@ body.theme-plain { --bg:#FFFFFF; --surface-2:#F4F4F5; --line:#E4E4E7; --line-sof
 }
 .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ============================================================
+   增强模块 v2 — 样式
+   ============================================================ */
+
+/* 权限:不可编辑的单元格 */
+.roster tbody td.locked {
+  cursor: default;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 5px,
+    rgba(45,49,66,.02) 5px, rgba(45,49,66,.02) 10px
+  );
+}
+.roster tbody td.locked:hover::after { content: '🔒'; opacity: .45; }
+.roster tbody td.mine {
+  box-shadow: inset 3px 0 0 var(--tier-ap);
+}
+.roster tbody td.mine::before {
+  content: '●'; color: var(--tier-ap); font-size: 9px;
+  position: absolute; left: 4px; top: 6px;
+}
+
+/* 周次选择器 */
+.week-picker { display: flex; align-items: center; }
+.week-picker select {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 5px 9px; font-size: 12.5px; color: var(--ink);
+  font-family: inherit;
+}
+.week-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 9px; border-radius: 11px;
+  background: var(--tier-ap-soft); color: #4A7A60;
+  font-size: 11.5px; font-weight: 600;
+}
+.week-badge.clickable { cursor: pointer; border: 0; font-family: inherit; }
+.week-badge.clickable:hover { filter: brightness(.96); }
+
+/* 趋势面板 */
+.trend-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 16px 18px;
+}
+.trend-empty { padding: 30px; }
+
+/* 留言板 */
+.msg {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 13px 15px;
+  margin-bottom: 10px;
+}
+.msg-head {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 7px;
+}
+.msg-role {
+  padding: 2px 8px; border-radius: 10px;
+  font-size: 11px; font-weight: 600;
+}
+.msg-role.teacher { background: var(--tier-a-soft); color: #4A6F8A; }
+.msg-role.student { background: var(--tier-ap-soft); color: #4A7A60; }
+.msg-role.parent  { background: var(--tier-b-soft); color: #8B6A3B; }
+.msg-from { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.msg-to { font-size: 12px; color: var(--ink-3); }
+.msg-time { font-size: 11px; color: var(--ink-3); margin-left: auto; }
+.msg-body {
+  font-size: 13px; line-height: 1.65; color: var(--ink);
+  white-space: pre-wrap; word-break: break-word;
+}
+.msg-reply {
+  margin-top: 10px; padding: 10px 12px;
+  background: var(--surface-2); border-radius: var(--r-sm);
+  border-left: 2px solid var(--tier-a);
+}
+.msg-reply-form {
+  display: flex; gap: 8px; margin-top: 10px;
+}
+.msg-reply-form input {
+  flex: 1; padding: 7px 11px;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  font: inherit; font-size: 13px; background: var(--surface);
+}
+.msg-reply-form input:focus { outline: none; border-color: var(--ink-3); }
+.msg-reply-form .btn { padding: 7px 13px; font-size: 12.5px; }
+
+.msg-compose {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 14px;
+}
+.msg-compose textarea {
+  min-height: 70px; border: 1px solid var(--line);
+  border-radius: var(--r-sm); background: var(--surface);
+  padding: 10px 12px; font: inherit; font-size: 13px;
+  resize: vertical;
+}
+.msg-compose textarea:focus { outline: none; border-color: var(--ink-3); }
+.msg-compose .compose-foot {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+}
+.msg-compose .compose-foot span { font-size: 11.5px; color: var(--ink-3); }
+
+/* 抽屉 tab */
+.d-tabs button[data-tab="messages"] .badge {
+  display: inline-block; margin-left: 5px;
+  padding: 0 6px; border-radius: 8px;
+  background: var(--tier-c-soft); color: #8B4F58;
+  font-size: 10.5px; font-weight: 700; vertical-align: 1px;
+}
+
+/* 面板拖拽 */
+.panel.draggable { position: relative; }
+.panel.draggable .drag-handle {
+  position: absolute; top: 10px; right: 10px;
+  cursor: grab; color: var(--ink-3); font-size: 13px;
+  opacity: 0; transition: opacity .15s;
+  user-select: none; padding: 2px 4px; border-radius: 4px;
+  background: var(--surface);
+}
+.panel.draggable:hover .drag-handle { opacity: .7; }
+.panel.draggable .drag-handle:hover { opacity: 1; background: var(--surface-2); }
+.panel.dragging { opacity: .5; }
+.panel.drag-over { box-shadow: 0 0 0 2px var(--tier-b); }
+
+/* 高对比投影主题 */
+body.theme-hd {
+  --bg:        #FFFFFF;
+  --surface:   #FFFFFF;
+  --surface-2: #F2F2F4;
+  --ink:       #14161A;
+  --ink-2:     #3A3F47;
+  --ink-3:     #6B7280;
+  --line:      #D4D7DD;
+  --line-soft: #E8EAEE;
+  --tier-ap: #1A7F5F;  --tier-ap-soft: #DCF2E8;
+  --tier-a:  #1E5F8F;  --tier-a-soft:  #DCEAF5;
+  --tier-b:  #9A6412;  --tier-b-soft:  #F7EAD3;
+  --tier-c:  #A63D4E;  --tier-c-soft:  #F8E0E4;
+  --sub-L:   #1E5F8F;  --sub-L-soft:  #DCEAF5;
+  --sub-R:   #1A7F5F;  --sub-R-soft:  #DCF2E8;
+  --sub-W:   #A63D4E;  --sub-W-soft:  #F8E0E4;
+  --sub-V:   #5B3E8E;  --sub-V-soft:  #E9E1F5;
+}
+body.theme-hd .kpi .value { font-size: 30px; }
+body.theme-hd .kpi { border-width: 1.5px; }
+body.theme-hd .dist-bar { height: 26px; }
+body.theme-hd .roster tbody td { padding: 13px 12px; }
+body.theme-hd .roster thead th { font-size: 12.5px; }
+
+/* 抽屉内周历史表 */
+.week-history { margin-top: 6px; }
+.week-history table {
+  width: 100%; border-collapse: collapse; font-size: 12.5px;
+}
+.week-history th {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .4px;
+  color: var(--ink-3); font-weight: 600;
+  text-align: left; padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.week-history td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line-soft);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.week-history tr.now td { background: var(--surface-2); font-weight: 600; }
+.week-history input {
+  width: 46px; padding: 3px 5px; text-align: center;
+  border: 1px solid var(--line); border-radius: 4px;
+  font: inherit; font-size: 12px;
+  background: var(--surface);
+}
+.week-history input:focus { outline: none; border-color: var(--ink-3); }
+.week-history .col-l { width: 52px; text-align: center; }
+
 </style>
 </head>
 <body>
@@ -702,6 +882,7 @@ body.theme-plain { --bg:#FFFFFF; --surface-2:#F4F4F5; --line:#E4E4E7; --line-sof
 
   <div class="topbar">
     <div class="brand">
+      <button class="week-badge clickable" id="weekBadge" title="点击切换当前周">第 1 周</button>
       <h1>高二(5)班 · 英语学习仪表盘</h1>
       <p class="sub">40 名学生 · 12 周个性化计划 · 数据自动保存于本机浏览器</p>
     </div>
@@ -714,15 +895,15 @@ body.theme-plain { --bg:#FFFFFF; --surface-2:#F4F4F5; --line:#E4E4E7; --line-sof
     </div>
   </div>
 
-  <div class="kpi-grid" id="kpiGrid"></div>
+  <div class="kpi-grid" id="kpiGrid" data-panel-key="kpi"></div>
 
   <div class="row">
-    <div class="panel" id="panelDist">
+    <div class="panel draggable" id="panelDist" data-panel-key="dist">
       <h2>分数段分布 <span class="meta" id="distMeta"></span></h2>
       <p class="help">以 4 个分数段锚定高考目标切线 · 颜色对应学生 Tier</p>
       <div class="dist" id="dist"></div>
     </div>
-    <div class="panel" id="panelSubj">
+    <div class="panel draggable" id="panelSubj" data-panel-key="subj">
       <h2>听 / 读 / 写 / 词 四项分项达标率 <span class="meta">目标线 80%</span></h2>
       <p class="help">教师调整数据后实时重算 · 基于原始成绩表</p>
       <div class="subj-grid" id="subjGrid"></div>
@@ -730,15 +911,23 @@ body.theme-plain { --bg:#FFFFFF; --surface-2:#F4F4F5; --line:#E4E4E7; --line-sof
   </div>
 
   <div class="row">
-    <div class="panel" id="panelWeak">
+    <div class="panel draggable" id="panelWeak" data-panel-key="weak">
       <h2>学生弱项分布 <span class="meta">诊断 → 自动分组</span></h2>
       <p class="help">写作 25 名(62.5%)是班级最大短板,可针对该群体统一加餐</p>
       <div class="weak" id="weakGrid"></div>
     </div>
-    <div class="panel" id="panelClassProg">
+    <div class="panel draggable" id="panelClassProg" data-panel-key="classProg">
       <h2>本周班级进度 <span class="meta">汇总教师填入的完成度</span></h2>
       <p class="help">每位学生在抽屉内填写听 / 读 / 写 / 词 完成百分比 · 此处显示班级均值</p>
       <div class="subj-grid" id="classProgGrid"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="panel draggable" id="panelTrend" data-panel-key="trend">
+      <h2>12 周进度趋势 <span class="meta" id="trendMeta"></span></h2>
+      <p class="help">每名学生在各周的听 / 读 / 写 / 词 完成度,取班级均值绘制</p>
+      <div class="trend-wrap" id="trendGrid"></div>
     </div>
   </div>
 
@@ -767,7 +956,7 @@ body.theme-plain { --bg:#FFFFFF; --surface-2:#F4F4F5; --line:#E4E4E7; --line-sof
     </div>
   </div>
 
-  <div id="rosterSection">
+  <div id="rosterSection" data-panel-key="roster">
   <div class="roster-wrap">
     <table class="roster" id="roster">
       <thead>
@@ -822,6 +1011,7 @@ body.theme-plain { --bg:#FFFFFF; --surface-2:#F4F4F5; --line:#E4E4E7; --line-sof
     <button data-tab="progress" class="on">学习进度</button>
     <button data-tab="strategy">提升策略</button>
     <button data-tab="note">教师备注</button>
+    <button data-tab="messages">留言板 <span class="badge" id="msgBadge"></span></button>
   </div>
   <div class="d-body">
     <div class="tab-pane on" data-pane="progress">
@@ -831,6 +1021,11 @@ body.theme-plain { --bg:#FFFFFF; --surface-2:#F4F4F5; --line:#E4E4E7; --line-sof
       <div id="dProgress"></div>
       <p style="font-size:12.5px;color:var(--ink-3);margin:18px 0 10px;">12 周计划里程碑</p>
       <div id="dMilestones" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
+
+      <p style="font-size:12.5px;color:var(--ink-3);margin:20px 0 8px;">
+        周记录明细 <span style="font-size:11.5px">（可逐周填写,用于绘制趋势）</span>
+      </p>
+      <div class="week-history" id="dWeekHistory"></div>
     </div>
     <div class="tab-pane" data-pane="strategy">
       <div class="strategy" id="dStrategy"></div>
@@ -846,6 +1041,11 @@ body.theme-plain { --bg:#FFFFFF; --surface-2:#F4F4F5; --line:#E4E4E7; --line-sof
         <ul class="task-list" id="dTasks"></ul>
       </div>
     </div>
+    <div class="tab-pane" data-pane="messages">
+      <div id="msgComposeWrap"></div>
+      <div id="msgList"></div>
+    </div>
+
   </div>
 </div>
 
@@ -1097,9 +1297,15 @@ function progressColor(cur, target) {
 }
 
 function renderRoster() {
+  // 权限: 判断某单元格能否编辑
+  const cls = (field, s) => {
+    const ok = canEditScore(s.id) || canEdit(s.id, field);
+    const mine = PROFILE && PROFILE.studentId === s.id;
+    return (ok ? 'editable' : 'locked') + (mine ? ' mine' : '');
+  };
   const search = document.getElementById('searchInput').value.trim().toLowerCase();
   const tierBtn = document.querySelector('#tierFilter button.on');
-  const tier = tierBtn ? tierBtn.dataset.tier : 'all';
+  const tier = (tierBtn && tierBtn.dataset && tierBtn.dataset.tier) ? tierBtn.dataset.tier : 'all';
   const sort = document.getElementById('sortSelect').value;
 
   const scope = visibleStudents();
@@ -1132,18 +1338,18 @@ function renderRoster() {
     const wkAvg = ((s.progress_L + s.progress_R + s.progress_W + s.progress_V) / 4).toFixed(0);
     return `
       <tr data-id="${s.id}">
-        <td class="editable" data-field="id">${s.id}</td>
-        <td class="editable" data-field="name">${s.name}</td>
-        <td class="editable" data-field="tier">
+        <td class="${cls('id', s)}" data-field="id">${s.id}</td>
+        <td class="${cls('name', s)}" data-field="name">${s.name}</td>
+        <td class="${cls('tier', s)}" data-field="tier">
           <span class="tier-pill ${s.tier.replace('+','P')}">${s.tier}</span>
         </td>
-        <td class="editable" data-field="score">${s.score}</td>
-        <td class="editable" data-field="target">${s.target}</td>
+        <td class="${cls('score', s)}" data-field="score">${s.score}</td>
+        <td class="${cls('target', s)}" data-field="target">${s.target}</td>
         <td>${gap > 0 ? '<span class="gap">+'+gap+'</span>' : '<span class="gap">达成</span>'}</td>
-        <td class="editable" data-field="vocab">${s.vocab}</td>
-        <td class="editable" data-field="L">${s.L_cur}/${s.L_t}</td>
-        <td class="editable" data-field="R">${s.R_cur}/${s.R_t}</td>
-        <td class="editable" data-field="W">${s.W_cur}/${s.W_t}</td>
+        <td class="${cls('vocab', s)}" data-field="vocab">${s.vocab}</td>
+        <td class="${cls('L', s)}" data-field="L">${s.L_cur}/${s.L_t}</td>
+        <td class="${cls('R', s)}" data-field="R">${s.R_cur}/${s.R_t}</td>
+        <td class="${cls('W', s)}" data-field="W">${s.W_cur}/${s.W_t}</td>
         <td><span class="weak-pill ${s.weakness[0]}">${weakLabel(s.weakness)}</span></td>
         <td><div style="display:flex;align-items:center;gap:6px;">
           <div style="width:46px;height:6px;background:rgba(45,49,66,.06);border-radius:3px;overflow:hidden">
@@ -1182,6 +1388,11 @@ document.getElementById('rosterBody').addEventListener('click', e => {
   if (cell) {
     if (editingCell) finishEdit(false, editingCell);
     startEdit(cell);
+    return;
+  }
+  const locked = e.target.closest('td.locked');
+  if (locked) {
+    toast('当前身份无权修改该字段。可在「切换身份」中切换为老师。');
     return;
   }
   const tr = e.target.closest('tr[data-id]');
@@ -1329,6 +1540,8 @@ function openDrawer(s) {
   renderDrawerProgress(s);
   renderDrawerStrategy(s);
   renderDrawerNote(s);
+  renderMessages(s.id);
+  renderMsgCompose(s);
 
   document.getElementById('drawer').classList.add('on');
   document.getElementById('overlay').classList.add('on');
@@ -1376,17 +1589,33 @@ function renderDrawerProgress(s) {
   }).join('');
 
   document.querySelectorAll('#dProgress input').forEach(inp => {
+    const sid = document.getElementById('drawer').dataset.sid;
+    const stu = STUDENTS.find(s => s.id === sid);
+    const field = inp.dataset.field;
+    const allowed = canEdit(stu ? stu.id : '', field);
+    inp.disabled = !allowed;
+    inp.style.opacity = allowed ? '' : '.45';
+    inp.title = allowed ? '' : '当前身份无权修改该科进度';
     inp.addEventListener('input', () => {
-      const sid = document.getElementById('drawer').dataset.sid;
-      const stu = STUDENTS.find(s => s.id === sid);
-      if (!stu) return;
-      stu[inp.dataset.field] = Number(inp.value);
+      const stu2 = STUDENTS.find(s => s.id === sid);
+      if (!stu2) return;
+      const val = Math.min(100, Math.max(0, Number(inp.value) || 0));
+      stu2[field] = val;
+      // 同步写入本周记录
+      const rec = weekRecord(stu2, currentWeek());
+      const idxMap = { progress_L:0, progress_R:1, progress_W:2, progress_V:3 };
+      if (field in idxMap) rec.p[idxMap[field]] = val;
+      saveStudents();
       const bar = inp.closest('.prog-card').querySelector('.fill');
-      bar.style.width = inp.value + '%';
+      if (bar) bar.style.width = val + '%';
       renderClassProgress();
       renderRoster();
+      renderTrend(visibleStudents());
     });
   });
+
+  // 周记录明细表
+  renderWeekHistory(s);
 
   const gap = s.target - s.score;
   const ms = [
@@ -1401,6 +1630,48 @@ function renderDrawerProgress(s) {
       <div style="font-size:11px;color:var(--ink-3);">${m.desc}</div>
     </div>
   `).join('');
+}
+
+
+function renderWeekHistory(s) {
+  const el = document.getElementById('dWeekHistory');
+  if (!el) return;
+  ensureHistory(s);
+  const cur = currentWeek();
+  const idxMap = { progress_L:0, progress_R:1, progress_W:2, progress_V:3 };
+  const allow = canEdit(s.id, 'progress_L');
+  const weeks = Array.from({length: WEEK_COUNT}, (_,i)=>i+1);
+  const rows = weeks.map(w => {
+    const rec = (s.history||[]).find(h => h.w === w);
+    const p = rec ? rec.p : [0,0,0,0];
+    const cells = [0,1,2,3].map(i => {
+      const field = Object.keys(idxMap)[i];
+      const dis = (!allow || w > cur) ? 'disabled' : '';
+      const style = w > cur ? 'opacity:.35;' : '';
+      return `<td style="${style}"><input type="number" min="0" max="100" step="5" ${dis}
+                class="wk-in" data-w="${w}" data-i="${i}" value="${Number(p[i]||0)}"></td>`;
+    }).join('');
+    return `<tr class="${w===cur?'now':''}">
+      <td class="col-l">第 ${w} 周</td>${cells}
+      <td style="color:var(--ink-3);font-size:11.5px">${rec && rec.note ? '有备注' : ''}</td>
+    </tr>`;
+  }).join('');
+  el.innerHTML = `
+    <table>
+      <thead><tr>
+        <th class="col-l">周次</th><th>听</th><th>读</th><th>写</th><th>词</th><th></th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  el.querySelectorAll('.wk-in').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const w = Number(inp.dataset.w), i = Number(inp.dataset.i);
+      const rec = weekRecord(s, w);
+      rec.p[i] = Math.min(100, Math.max(0, Number(inp.value) || 0));
+      saveStudents();
+      renderTrend(visibleStudents());
+    });
+  });
 }
 
 function renderDrawerStrategy(s) {
@@ -1434,6 +1705,10 @@ function renderDrawerStrategy(s) {
 
 function renderDrawerNote(s) {
   const inp = document.getElementById('dNote');
+  const noteAllowed = canWriteNote(s.id);
+  inp.disabled = !noteAllowed;
+  inp.style.opacity = noteAllowed ? '' : '.5';
+  inp.title = noteAllowed ? '' : '当前身份无权编辑教师备注';
   inp.value = (PREFS.showNotes ? (s.note || '') : '');
   inp.placeholder = PREFS.showNotes
     ? '记录与该学生的最近沟通、家长反馈、心理状态、个别化调整建议...'
@@ -1739,9 +2014,9 @@ function writeSharedState(obj) {
 
 /* ---------- 视图渲染 ---------- */
 function applyTheme() {
-  const themes = ['warm','mint','blue','plain'];
+  const themes = ['warm','mint','blue','plain','hd'];
   const t = themes.includes(PREFS.theme) ? PREFS.theme : 'warm';
-  document.body.classList.remove('theme-mint','theme-blue','theme-plain');
+  document.body.classList.remove('theme-mint','theme-blue','theme-plain','theme-hd');
   if (t !== 'warm') document.body.classList.add('theme-' + t);
   document.body.classList.remove('density-compact','density-comfortable');
   if (PREFS.density === 'compact') document.body.classList.add('density-compact');
@@ -1952,7 +2227,7 @@ function openSettings() {
   const el = document.getElementById('settings');
   const body = el.querySelector('.settings-body');
   const themes = [
-    ['warm','暖色（默认）'],['mint','薄荷'],['blue','天蓝'],['plain','纯白']
+    ['warm','暖色（默认）'],['mint','薄荷'],['blue','天蓝'],['plain','纯白'],['hd','高对比投影']
   ];
   const panelLabels = {
     kpi:'KPI 数字条', dist:'分数段分布', subj:'四项分项达标率',
@@ -1991,13 +2266,19 @@ function openSettings() {
     </div>
 
     <div class="set-group">
+      <h4>面板顺序</h4>
+      <p class="gdesc">调整各面板在页面中的先后次序,也可直接拖动面板右上角的手柄。</p>
+      <div id="panelOrderList"></div>
+    </div>
+
+    <div class="set-group">
       <h4>外观</h4>
       <p class="gdesc">主题配色与信息密度。</p>
       <div class="set-item">
         <div><div>主题</div></div>
         <div class="swatch-row">
           ${themes.map(([k,label]) => `<button class="swatch ${PREFS.theme===k?'on':''}" data-theme="${k}" title="${label}" style="background:${
-            {warm:'#FBF8F2', mint:'#F3F8F4', blue:'#F4F7FB', plain:'#FFFFFF'}[k]
+            {warm:'#FBF8F2', mint:'#F3F8F4', blue:'#F4F7FB', plain:'#FFFFFF', hd:'#14161A'}[k]
           };box-shadow:inset 0 0 0 1px ${k==='plain'?'#d4d4d8':'transparent'}"></button>`).join('')}
         </div>
       </div>
@@ -2008,6 +2289,18 @@ function openSettings() {
             `<button class="${PREFS.density===d?'on':''}" data-density="${d}">${
               {compact:'紧凑',normal:'标准',comfortable:'宽松'}[d]}</button>`).join('')}
         </div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <h4>计划周次</h4>
+      <p class="gdesc">当前处于 12 周计划的第几周。趋势图只统计到当前周。</p>
+      <div class="set-item">
+        <div><div>当前周</div><div class="sdesc">影响趋势图与周记录的可填范围</div></div>
+        <select id="setWeek" style="padding:6px 10px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;font-size:13px;background:var(--surface);color:var(--ink);">
+          ${Array.from({length:WEEK_COUNT},(_,i)=>i+1).map(w =>
+            `<option value="${w}" ${PREFS.week==w?'selected':''}>第 ${w} 周</option>`).join('')}
+        </select>
       </div>
     </div>
 
@@ -2065,6 +2358,9 @@ function openSettings() {
       body.querySelectorAll('[data-density]').forEach(x => x.classList.toggle('on', x.dataset.density===PREFS.density));
     };
   });
+  renderPanelOrderList(body);
+  const wk = body.querySelector('#setWeek');
+  if (wk) wk.onchange = e => { setWeek(e.target.value); refresh(); toast('已切换到第 ' + PREFS.week + ' 周'); };
   const nm = body.querySelector('#setName');
   if (nm) nm.oninput = e => {
     if (PROFILE) { PROFILE.name = e.target.value; saveProfile(PROFILE); renderRoleBanner(); }
@@ -2123,15 +2419,463 @@ function refresh() {
   const scoped = visibleStudents();
   renderPersonalCard();
   renderRoleBanner();
+  const wb = document.getElementById('weekBadge');
+  if (wb) wb.textContent = '第 ' + (PREFS.week || 1) + ' 周';
   renderScopedKPI(scoped);
   renderScopedDist(scoped);
   renderScopedSubj(scoped);
   renderScopedWeak(scoped);
   renderScopedClassProg(scoped);
+  renderTrend(scoped);
   renderRoster();
   applyNamePrivacy();
+  updateMsgBadge();
 }
 
+
+/* ============================================================
+   增强模块 v2
+   1. 权限粒度 canEdit(studentId, field)
+   2. 12 周进度记录 (weekly history) + 趋势
+   3. 家长留言板 (messages)
+   4. 面板拖拽排序 + 主题扩展
+   5. 趋势图渲染
+   ============================================================ */
+
+/* ---------- 1. 权限 ---------- */
+function canEdit(studentId, field) {
+  if (!PROFILE) return false;
+  if (PROFILE.role === 'teacher') return true;
+  // 学生 / 家长: 只能改自己的进度和留言
+  if (PROFILE.studentId && studentId === PROFILE.studentId) {
+    // 只允许改各科进度 + 留言,不允许改分数/目标/姓名/Tier
+    return field && field.startsWith('progress_');
+  }
+  return false;
+}
+function canEditScore(studentId) {
+  if (!PROFILE) return false;
+  if (PROFILE.role === 'teacher') return true;
+  return PROFILE.studentId && studentId === PROFILE.studentId && PROFILE.role === 'student';
+}
+function canWriteNote(studentId) {
+  if (!PROFILE) return false;
+  if (PROFILE.role === 'teacher') return true;
+  return !!(PROFILE.studentId && studentId === PROFILE.studentId);
+}
+function canReply() {
+  return PROFILE && PROFILE.role === 'teacher';
+}
+
+/* ---------- 2. 12 周记录 ---------- */
+const WEEK_COUNT = 12;
+
+function currentWeek() {
+  // 从计划开始日算起;没有设定则用 1
+  return Math.min(WEEK_COUNT, Math.max(1, Number(PREFS.week || 1)));
+}
+function setWeek(w) {
+  PREFS.week = Math.min(WEEK_COUNT, Math.max(1, Number(w) || 1));
+  savePrefs();
+}
+function ensureHistory(s) {
+  if (!Array.isArray(s.history)) s.history = [];
+  // 保证每条记录有完整结构
+  s.history.forEach(h => {
+    if (!Array.isArray(h.p)) h.p = [0,0,0,0];
+    while (h.p.length < 4) h.p.push(0);
+    if (typeof h.note !== 'string') h.note = '';
+  });
+  return s.history;
+}
+function weekRecord(s, week) {
+  ensureHistory(s);
+  let rec = s.history.find(h => h.w === week);
+  if (!rec) { rec = { w: week, p: [0,0,0,0], note: '' }; s.history.push(rec); }
+  return rec;
+}
+function historyPoints(s, idx) {
+  ensureHistory(s);
+  return s.history.filter(h => h.w <= currentWeek()).map(h => Number(h.p[idx] || 0));
+}
+function avgHistory(s, idx) {
+  const pts = historyPoints(s, idx);
+  if (!pts.length) return 0;
+  return pts.reduce((a,b)=>a+b,0) / pts.length;
+}
+
+/* ---------- 3. 留言板 ---------- */
+const MSG_KEY = 'class_dashboard_messages_v1';
+function loadMessages() {
+  try {
+    const raw = localStorage.getItem(MSG_KEY);
+    if (!raw) return [];
+    const m = JSON.parse(raw);
+    return Array.isArray(m) ? m : [];
+  } catch(e) { return []; }
+}
+function saveMessages(list) {
+  try { localStorage.setItem(MSG_KEY, JSON.stringify(list)); } catch(e) {}
+}
+function addMessage(studentId, fromRole, text) {
+  if (!text || !text.trim()) return null;
+  const list = loadMessages();
+  const msg = {
+    id: 'M' + Date.now().toString(36),
+    studentId: studentId || '',
+    from: PROFILE ? (PROFILE.name || ({teacher:'老师',student:'学生',parent:'家长'}[PROFILE.role])) : '匿名',
+    role: fromRole,
+    text: text.trim(),
+    at: new Date().toISOString(),
+    reply: null,
+  };
+  list.push(msg);
+  saveMessages(list);
+  return msg;
+}
+function replyMessage(id, text) {
+  const list = loadMessages();
+  const m = list.find(x => x.id === id);
+  if (!m) return false;
+  m.reply = { text: text.trim(), at: new Date().toISOString(), by: PROFILE ? (PROFILE.name || '老师') : '老师' };
+  saveMessages(list);
+  return true;
+}
+function messagesFor(studentId) {
+  return loadMessages()
+    .filter(m => !studentId || m.studentId === studentId || m.studentId === '')
+    .sort((a,b) => (a.at < b.at ? 1 : -1));
+}
+
+/* ---------- 4. 面板顺序 ---------- */
+const PANEL_ORDER_KEY = 'class_dashboard_panel_order_v1';
+const PANEL_KEYS = ['kpi','dist','subj','weak','classProg','trend','roster'];
+function loadPanelOrder() {
+  try {
+    const raw = localStorage.getItem(PANEL_ORDER_KEY);
+    if (!raw) return PANEL_KEYS.slice();
+    const o = JSON.parse(raw);
+    if (!Array.isArray(o)) return PANEL_KEYS.slice();
+    // 保证新增面板也包含在内
+    const valid = o.filter(k => PANEL_KEYS.includes(k));
+    PANEL_KEYS.forEach(k => { if (!valid.includes(k)) valid.push(k); });
+    return valid;
+  } catch(e) { return PANEL_KEYS.slice(); }
+}
+function savePanelOrder(o) {
+  try { localStorage.setItem(PANEL_ORDER_KEY, JSON.stringify(o)); } catch(e) {}
+}
+let PANEL_ORDER = loadPanelOrder();
+
+/* ---------- 5. 趋势图 ---------- */
+function renderTrend(list) {
+  const el = document.getElementById('trendGrid');
+  if (!el) return;
+  const week = currentWeek();
+  const series = [
+    { key:'L', label:'听力', color:'var(--sub-L)' },
+    { key:'R', label:'阅读', color:'var(--sub-R)' },
+    { key:'W', label:'写作', color:'var(--sub-W)' },
+    { key:'V', label:'词汇', color:'var(--sub-V)' },
+  ];
+  const idxMap = { L:0, R:1, W:2, V:3 };
+
+  // 计算每周班级均值
+  const perWeek = [];
+  for (let w = 1; w <= week; w++) {
+    const row = { w, vals: [] };
+    series.forEach(s => {
+      const vals = list.map(st => {
+        const rec = (st.history||[]).find(h => h.w === w);
+        return rec ? Number(rec.p[idxMap[s.key]] || 0) : null;
+      }).filter(v => v !== null);
+      row.vals.push(vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0);
+    });
+    perWeek.push(row);
+  }
+
+  if (!perWeek.length) {
+    el.innerHTML = '<div class="empty">还没有进度记录。点击学生行的周进度,或进入详情抽屉填写。</div>';
+    return;
+  }
+
+  // 画折线图(SVG,手写坐标)
+  const W = 640, H = 220, PAD = 34;
+  const maxV = 100;
+  const x = i => PAD + (perWeek.length === 1 ? (W-PAD*2)/2 : (i/(perWeek.length-1))*(W-PAD*2));
+  const y = v => H - PAD - (v/maxV)*(H-PAD*2);
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">`;
+  // 网格
+  for (let g = 0; g <= 4; g++) {
+    const gy = y(g * 25);
+    svg += `<line x1="${PAD}" y1="${gy}" x2="${W-PAD}" y2="${gy}" stroke="#ECE6D7" stroke-width="1"/>`;
+    svg += `<text x="${PAD-8}" y="${gy+4}" text-anchor="end" font-size="11" fill="#8C92A8">${g*25}</text>`;
+  }
+  // 周标签
+  perWeek.forEach((r,i) => {
+    svg += `<text x="${x(i)}" y="${H-PAD+18}" text-anchor="middle" font-size="11" fill="#8C92A8">W${r.w}</text>`;
+  });
+  // 各科折线
+  series.forEach((s, si) => {
+    const pts = perWeek.map((r,i) => `${x(i)},${y(r.vals[si])}`).join(' ');
+    svg += `<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="2.5"
+             stroke-linejoin="round" stroke-linecap="round"/>`;
+    perWeek.forEach((r,i) => {
+      svg += `<circle cx="${x(i)}" cy="${y(r.vals[si])}" r="3.2" fill="${s.color}"/>`;
+    });
+  });
+  svg += '</svg>';
+
+  // 图例
+  const legend = series.map(s => `
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)">
+      <span style="width:12px;height:3px;border-radius:2px;background:${s.color};display:inline-block"></span>
+      ${s.label}
+      <strong style="font-variant-numeric:tabular-nums">${perWeek[perWeek.length-1].vals[series.indexOf(s)].toFixed(0)}%</strong>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px">
+      <div style="display:flex;gap:14px;flex-wrap:wrap">${legend}</div>
+      <div class="week-picker">
+        <label style="font-size:11.5px;color:var(--ink-3);margin-right:6px">当前周</label>
+        <select id="weekSelect">
+          ${Array.from({length:WEEK_COUNT},(_,i)=>i+1).map(w =>
+            `<option value="${w}" ${w===week?'selected':''}>第 ${w} 周</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    ${svg}
+  `;
+
+  const sel = document.getElementById('weekSelect');
+  if (sel) sel.onchange = e => { setWeek(e.target.value); refresh(); };
+}
+
+/* ---------- 面板排序应用 ---------- */
+function applyPanelOrder() {
+  // 把各 panel 容器按 PANEL_ORDER 重排到 app 内
+  const app = document.getElementById('app');
+  const map = {
+    kpi: 'kpiGrid',
+    dist: 'panelDist',
+    subj: 'panelSubj',
+    weak: 'panelWeak',
+    classProg: 'panelClassProg',
+    trend: 'panelTrend',
+    roster: 'rosterSection',
+  };
+  // row 结构较复杂,这里只保证 rosterSection 排最后,其余保持
+  const roster = document.getElementById('rosterSection');
+  const footer = document.querySelector('.footer');
+  if (roster && footer && app) {
+    app.insertBefore(roster, footer);
+  }
+}
+
+/* ---------- 留言板渲染 ---------- */
+function renderMessages(studentId) {
+  const el = document.getElementById('msgList');
+  if (!el) return;
+  const list = messagesFor(studentId);
+  const roleLabel = { teacher:'老师', student:'学生', parent:'家长', system:'系统' };
+
+  if (!list.length) {
+    el.innerHTML = '<div class="empty" style="padding:24px">还没有留言。学生或家长可以在详情抽屉的「留言板」里留下问题。</div>';
+    return;
+  }
+
+  el.innerHTML = list.map(m => {
+    const canReplyNow = canReply() && !m.reply;
+    const sid = m.studentId;
+    const stu = STUDENTS.find(s => s.id === sid);
+    return `
+      <div class="msg">
+        <div class="msg-head">
+          <span class="msg-role ${m.role}">${roleLabel[m.role] || m.role}</span>
+          <span class="msg-from">${m.from}</span>
+          ${stu ? `<span class="msg-to">→ ${stu.name}</span>` : '<span class="msg-to">→ 全班</span>'}
+          <span class="msg-time">${formatTime(m.at)}</span>
+        </div>
+        <div class="msg-body">${escapeHtml(m.text)}</div>
+        ${m.reply ? `
+          <div class="msg-reply">
+            <div class="msg-head">
+              <span class="msg-role teacher">老师</span>
+              <span class="msg-from">${escapeHtml(m.reply.by)}</span>
+              <span class="msg-time">${formatTime(m.reply.at)}</span>
+            </div>
+            <div class="msg-body">${escapeHtml(m.reply.text)}</div>
+          </div>` : ''}
+        ${canReplyNow ? `
+          <div class="msg-reply-form">
+            <input type="text" id="reply-${m.id}" placeholder="回复这条留言...">
+            <button class="btn" data-reply="${m.id}">回复</button>
+          </div>` : ''}
+      </div>`;
+  }).join('');
+
+  el.querySelectorAll('[data-reply]').forEach(b => {
+    b.onclick = () => {
+      const id = b.dataset.reply;
+      const inp = document.getElementById('reply-' + id);
+      if (!inp || !inp.value.trim()) { toast('请先输入回复内容'); return; }
+      if (replyMessage(id, inp.value)) {
+        toast('回复已保存');
+        renderMessages(studentId);
+      }
+    };
+  });
+}
+
+
+function renderMsgCompose(s) {
+  const el = document.getElementById('msgComposeWrap');
+  if (!el) return;
+  const allowed = canWriteNote(s.id);
+  if (!allowed) { el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <div class="msg-compose">
+      <textarea id="msgInput" placeholder="${PROFILE && PROFILE.role==='teacher'
+        ? '给该学生留言,或记录一条给家长的回复...'
+        : '给老师留言:反馈学习情况、提出问题、说明困难...'}"></textarea>
+      <div class="compose-foot">
+        <span>留言仅保存在本机浏览器,可用「导出」备份</span>
+        <button class="btn primary" id="msgSend">发送留言</button>
+      </div>
+    </div>`;
+  const btn = document.getElementById('msgSend');
+  if (btn) btn.onclick = () => {
+    const ta = document.getElementById('msgInput');
+    if (!ta || !ta.value.trim()) { toast('请先输入留言内容'); return; }
+    addMessage(s.id, PROFILE.role, ta.value);
+    ta.value = '';
+    toast('留言已发送');
+    renderMessages(s.id);
+    updateMsgBadge();
+  };
+}
+
+function updateMsgBadge() {
+  const badge = document.getElementById('msgBadge');
+  if (!badge) return;
+  const sid = document.getElementById('drawer').dataset.sid;
+  const list = messagesFor(sid || '');
+  const unread = list.filter(m => !m.reply).length;
+  badge.textContent = unread ? String(unread) : '';
+  badge.style.display = unread ? 'inline-block' : 'none';
+}
+
+function formatTime(iso) {
+  try {
+    const d = new Date(iso);
+    const pad = n => String(n).padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  } catch(e) { return ''; }
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+/* 面板拖拽排序 —— 拖动手柄交换面板顺序,顺序存入 localStorage */
+function initPanelDrag() {
+  const containers = [
+    { key:'kpi',      el: document.getElementById('kpiGrid') },
+    { key:'dist',     el: document.getElementById('panelDist') },
+    { key:'subj',     el: document.getElementById('panelSubj') },
+    { key:'weak',     el: document.getElementById('panelWeak') },
+    { key:'classProg',el: document.getElementById('panelClassProg') },
+    { key:'trend',    el: document.getElementById('panelTrend') },
+  ].filter(c => c.el);
+
+  if (!containers.length) return;
+
+  // 加手柄
+  containers.forEach(c => {
+    if (c.el.querySelector('.drag-handle')) return;
+    const h = document.createElement('span');
+    h.className = 'drag-handle';
+    h.textContent = '⠿';
+    h.title = '拖动调整面板顺序';
+    c.el.appendChild(h);
+  });
+
+  let dragging = null;
+
+  containers.forEach(c => {
+    const handle = c.el.querySelector('.drag-handle');
+    if (!handle) return;
+
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dragging = c;
+      c.el.classList.add('dragging');
+      document.body.style.userSelect = 'none';
+    });
+
+    c.el.addEventListener('mouseenter', () => {
+      if (!dragging || dragging === c) return;
+      c.el.classList.add('drag-over');
+    });
+    c.el.addEventListener('mouseleave', () => c.el.classList.remove('drag-over'));
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging.el.classList.remove('dragging');
+    document.body.style.userSelect = '';
+    // 找到当前顺序
+    const order = [];
+    document.querySelectorAll('[data-panel-key]').forEach(el => {
+      order.push(el.getAttribute('data-panel-key'));
+    });
+    dragging = null;
+    savePanelOrder(order);
+    toast('面板顺序已保存');
+  });
+}
+
+/* 设置面板里的面板顺序列表 */
+function renderPanelOrderList(body) {
+  const labels = {
+    kpi:'KPI 数字条', dist:'分数段分布', subj:'四项分项达标率',
+    weak:'弱项分布', classProg:'本周班级进度', trend:'12 周进度趋势', roster:'学生名单表'
+  };
+  const order = loadPanelOrder();
+  const list = body.querySelector('#panelOrderList');
+  if (!list) return;
+  list.innerHTML = order.map((k, i) => `
+    <div class="set-item" data-order-key="${k}">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="color:var(--ink-3);font-size:12px;cursor:grab">⠿</span>
+        <span>${labels[k] || k}</span>
+      </div>
+      <div style="display:flex;gap:4px">
+        <button class="btn" data-move="${k}" data-dir="up" style="padding:3px 8px;font-size:11px">↑</button>
+        <button class="btn" data-move="${k}" data-dir="down" style="padding:3px 8px;font-size:11px">↓</button>
+      </div>
+    </div>`).join('');
+
+  list.querySelectorAll('[data-move]').forEach(b => {
+    b.onclick = () => {
+      const key = b.dataset.move;
+      const dir = b.dataset.dir;
+      const o = loadPanelOrder();
+      const i = o.indexOf(key);
+      const j = dir === 'up' ? i - 1 : i + 1;
+      if (j < 0 || j >= o.length) return;
+      o.splice(j, 0, o.splice(i, 1)[0]);
+      savePanelOrder(o);
+      renderPanelOrderList(body);
+      applyPanelOrder();
+      toast('顺序已更新');
+    };
+  });
+}
 
 /* ---------- 启动流程 ---------- */
 (function boot() {
@@ -2162,6 +2906,12 @@ function refresh() {
 
   // 3. 绑定设置按钮
   document.getElementById('settingsBtn').onclick = openSettings;
+  initPanelDrag();
+  document.getElementById('weekBadge').onclick = () => {
+    setWeek((Number(PREFS.week || 1) % WEEK_COUNT) + 1);
+    refresh();
+    toast('已切换到第 ' + PREFS.week + ' 周');
+  };
   document.getElementById('settingsFloat').onclick = openSettings;
   document.getElementById('closeSettings').onclick = closeSettings;
 })();
