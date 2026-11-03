@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高二(5)班 · 英语学习仪表盘</title>
+<style>
+:root {
+  --bg:        #FBF8F2;
+  --surface:   #FFFFFF;
+  --surface-2: #FAF6EE;
+  --ink:       #2D3142;
+  --ink-2:     #6B7080;
+  --ink-3:     #8C92A8;
+  --line:      #ECE6D7;
+  --line-soft: #F3EEDD;
+
+  --tier-ap:  #87B9A1;  --tier-ap-soft: #E8F2EB;
+  --tier-a:   #93B8D4;  --tier-a-soft:  #EAF1F6;
+  --tier-b:   #E3C49A;  --tier-b-soft:  #F7EEDC;
+  --tier-c:   #D9A8AE;  --tier-c-soft:  #F6E4E6;
+
+  --sub-L:    #93B8D4;  --sub-L-soft:  #EAF1F6;
+  --sub-R:    #87B9A1;  --sub-R-soft:  #E8F2EB;
+  --sub-W:    #D9A8AE;  --sub-W-soft:  #F6E4E6;
+  --sub-V:    #C5B0DA;  --sub-V-soft:  #EFE8F5;
+
+  --warn:     #E3C49A;
+  --bad:      #D9A8AE;
+  --good:     #87B9A1;
+
+  --shadow-sm: 0 1px 2px rgba(45,49,66,.04), 0 1px 3px rgba(45,49,66,.06);
+  --shadow-md: 0 4px 12px rgba(45,49,66,.06), 0 2px 4px rgba(45,49,66,.04);
+  --shadow-lg: 0 12px 28px rgba(45,49,66,.10), 0 4px 8px rgba(45,49,66,.04);
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+               'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; }
+
+.app { max-width: 1440px; margin: 0 auto; padding: 0 24px 96px; }
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 0 22px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.brand h1 {
+  margin: 0; font-size: 22px; letter-spacing: -.5px;
+  color: var(--ink); font-weight: 600;
+}
+.brand .sub {
+  margin: 2px 0 0; color: var(--ink-3); font-size: 12.5px;
+  letter-spacing: .3px;
+}
+.topbar-actions { display: flex; gap: 8px; }
+.btn {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink); padding: 7px 14px;
+  font-size: 13px; border-radius: var(--r-sm);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background .15s, transform .05s;
+}
+.btn:hover { background: var(--surface-2); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn.primary:hover { background: #1a1d2c; }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+@media (max-width: 1280px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 720px)  { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 4px;
+  box-shadow: var(--shadow-sm);
+}
+.kpi .label {
+  font-size: 11.5px; color: var(--ink-3);
+  letter-spacing: .5px; text-transform: uppercase;
+}
+.kpi .value {
+  font-size: 26px; font-weight: 600; color: var(--ink);
+  letter-spacing: -1px; line-height: 1.1;
+}
+.kpi .unit { font-size: 13px; color: var(--ink-3); margin-left: 3px; font-weight: 400; }
+.kpi.accent-ap .value { color: var(--tier-ap); }
+.kpi.accent-a  .value { color: var(--tier-a); }
+.kpi.accent-b  .value { color: #C99366; }
+.kpi.accent-c  .value { color: #B16E76; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+@media (max-width: 980px) { .row { grid-template-columns: 1fr; } }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+.panel h2 {
+  margin: 0 0 4px; font-size: 14px; font-weight: 600;
+  color: var(--ink); letter-spacing: -.2px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.panel h2 .meta { font-size: 11.5px; color: var(--ink-3); font-weight: 400; }
+.panel .help { font-size: 12px; color: var(--ink-3); margin: 0 0 14px; }
+
+.dist { display: flex; flex-direction: column; gap: 9px; }
+.dist-row { display: grid; grid-template-columns: 84px 1fr 64px 56px; align-items: center; gap: 12px; }
+.dist-row .name { font-size: 12.5px; color: var(--ink-2); font-weight: 500; }
+.dist-bar {
+  height: 22px; background: var(--surface-2); border-radius: 4px;
+  position: relative; overflow: hidden;
+}
+.dist-bar .fill {
+  position: absolute; top: 0; left: 0; bottom: 0;
+  border-radius: 4px; transition: width .4s ease;
+}
+.dist-row .count {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  text-align: right; font-variant-numeric: tabular-nums;
+}
+.dist-row .pct {
+  font-size: 11.5px; color: var(--ink-3); text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.dist.ap .fill { background: var(--tier-ap); }
+.dist.a  .fill { background: var(--tier-a); }
+.dist.b  .fill { background: var(--tier-b); }
+.dist.c  .fill { background: var(--tier-c); }
+
+.subj-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.subj {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md); padding: 12px 14px;
+}
+.subj .name { font-size: 12px; color: var(--ink-2); margin-bottom: 4px; }
+.subj .pct {
+  font-size: 22px; font-weight: 600;
+  font-variant-numeric: tabular-nums; letter-spacing: -1px; line-height: 1.05;
+}
+.subj .meta { font-size: 11px; color: var(--ink-3); margin: 4px 0 8px; }
+.subj .bar { height: 6px; background: rgba(45,49,66,.08); border-radius: 3px; overflow: hidden; }
+.subj .fill { height: 100%; border-radius: 3px; transition: width .5s ease; }
+.subj.L { background: linear-gradient(180deg, var(--sub-L-soft) 0%, #fff 70%); }
+.subj.L .pct { color: var(--sub-L); } .subj.L .fill { background: var(--sub-L); }
+.subj.R { background: linear-gradient(180deg, var(--sub-R-soft) 0%, #fff 70%); }
+.subj.R .pct { color: var(--sub-R); } .subj.R .fill { background: var(--sub-R); }
+.subj.W { background: linear-gradient(180deg, var(--sub-W-soft) 0%, #fff 70%); }
+.subj.W .pct { color: var(--sub-W); } .subj.W .fill { background: var(--sub-W); }
+.subj.V { background: linear-gradient(180deg, var(--sub-V-soft) 0%, #fff 70%); }
+.subj.V .pct { color: var(--sub-V); } .subj.V .fill { background: var(--sub-V); }
+
+.weak { display: flex; gap: 10px; flex-wrap: wrap; }
+.weak-card {
+  flex: 1; min-width: 130px;
+  border-radius: var(--r-md); padding: 12px 14px;
+  border: 1px solid var(--line-soft);
+}
+.weak-card.W { background: var(--sub-W-soft); border-color: var(--sub-W); }
+.weak-card.L { background: var(--sub-L-soft); border-color: var(--sub-L); }
+.weak-card.R { background: var(--sub-R-soft); border-color: var(--sub-R); }
+.weak-card .lab {
+  font-size: 11.5px; letter-spacing: .5px; text-transform: uppercase;
+  font-weight: 600; opacity: .8;
+}
+.weak-card.W .lab { color: #B16E76; }
+.weak-card.L .lab { color: #5F8DAD; }
+.weak-card.R .lab { color: #4F8770; }
+.weak-card .v {
+  font-size: 24px; font-weight: 600; letter-spacing: -1px;
+  font-variant-numeric: tabular-nums; margin-top: 4px;
+}
+.weak-card.W .v { color: var(--sub-W); }
+.weak-card.L .v { color: var(--sub-L); }
+.weak-card.R .v { color: var(--sub-R); }
+.weak-card .of { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+
+.toolbar {
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap; padding: 14px 0 10px;
+}
+.toolbar input.search {
+  background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  padding: 7px 12px; font-size: 13px; color: var(--ink);
+  min-width: 220px;
+}
+.toolbar input.search:focus { outline: none; border-color: var(--ink-3); }
+.seg {
+  display: inline-flex; border: 1px solid var(--line);
+  border-radius: var(--r-sm); overflow: hidden; background: var(--surface);
+}
+.seg button {
+  border: 0; background: transparent; padding: 6px 12px;
+  font-size: 12.5px; color: var(--ink-2); font-weight: 500;
+  border-right: 1px solid var(--line);
+}
+.seg button:last-child { border-right: 0; }
+.seg button.on { background: var(--ink); color: var(--bg); }
+.seg button:not(.on):hover { background: var(--surface-2); }
+.sort { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-3); }
+.sort select {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-sm); padding: 6px 8px;
+  font-size: 12.5px; color: var(--ink); font-family: inherit;
+}
+
+.roster-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.roster { width: 100%; border-collapse: collapse; font-size: 13px; }
+.roster thead th {
+  background: var(--surface-2); font-weight: 600; color: var(--ink-2);
+  font-size: 11.5px; letter-spacing: .5px; text-transform: uppercase;
+  text-align: left; padding: 11px 12px;
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; white-space: nowrap;
+}
+.roster tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: middle;
+}
+.roster tbody tr { cursor: pointer; transition: background .12s; }
+.roster tbody tr:hover { background: var(--surface-2); }
+.roster tbody tr.active {
+  background: #FFF8E8;
+  box-shadow: inset 3px 0 0 var(--tier-b);
+}
+.roster tbody td.editable { cursor: text; position: relative; }
+.roster tbody td.editable::after {
+  content: '✎'; opacity: 0;
+  position: absolute; right: 6px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3); font-size: 11px; transition: opacity .15s;
+}
+.roster tbody td.editable:hover::after { opacity: .8; }
+.roster tbody td.editing { padding: 0; background: var(--surface-2); }
+.roster tbody td.editing input,
+.roster tbody td.editing select {
+  width: 100%; border: 0; outline: none; padding: 10px 12px;
+  font: inherit; background: var(--surface-2); color: var(--ink);
+  border: 2px solid var(--tier-b);
+}
+.roster tbody td.editing select { padding-right: 24px; }
+.roster tbody td.editing input.paired {
+  width: 38%; display: inline-block; text-align: center; padding: 6px 2px;
+}
+
+.tier-pill, .weak-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 9px; border-radius: 11px;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .3px;
+}
+.tier-pill::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor;
+}
+.tier-pill.AP { background: var(--tier-ap-soft); color: #4A7A60; }
+.tier-pill.A  { background: var(--tier-a-soft);  color: #4A6F8A; }
+.tier-pill.B  { background: var(--tier-b-soft);  color: #8B6A3B; }
+.tier-pill.C  { background: var(--tier-c-soft);  color: #8B4F58; }
+.weak-pill.W  { background: var(--sub-W-soft); color: #8B4F58; }
+.weak-pill.L  { background: var(--sub-L-soft); color: #4A6F8A; }
+.weak-pill.R  { background: var(--sub-R-soft); color: #4A7A60; }
+
+.gap {
+  font-size: 11.5px; color: var(--ink-3);
+  font-variant-numeric: tabular-nums; margin-left: 4px;
+}
+
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(45,49,66,.28);
+  backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .22s ease; z-index: 90;
+}
+.overlay.on { opacity: 1; pointer-events: auto; }
+
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(720px, 96vw);
+  background: var(--bg); z-index: 100;
+  transform: translateX(100%);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1);
+  box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column;
+}
+.drawer.on { transform: translateX(0); }
+
+.d-head {
+  padding: 20px 24px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.d-head .close {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-2); font-size: 18px; line-height: 1;
+}
+.d-head .close:hover { background: var(--surface-2); }
+.d-title { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.d-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--surface-2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 600; color: var(--ink);
+  border: 1px solid var(--line);
+}
+.d-meta { display: flex; flex-direction: column; gap: 4px; }
+.d-meta .name { font-size: 20px; font-weight: 600; color: var(--ink); letter-spacing: -.5px; }
+.d-meta .row { display: flex; gap: 10px; align-items: center; margin: 0; }
+
+.d-score { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding-top: 10px; }
+.d-score .cell { padding: 10px 12px; background: var(--surface-2); border-radius: var(--r-sm); }
+.d-score .cell .l { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .5px; }
+.d-score .cell .v { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.d-score .cell .g { font-size: 11px; color: var(--ink-3); }
+
+.d-tabs {
+  display: flex; background: var(--surface);
+  border-bottom: 1px solid var(--line); padding: 0 24px;
+}
+.d-tabs button {
+  background: transparent; border: 0; padding: 12px 16px;
+  font-size: 13px; color: var(--ink-3); font-weight: 500;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.d-tabs button.on { color: var(--ink); border-bottom-color: var(--ink); }
+
+.d-body {
+  flex: 1; overflow-y: auto; padding: 18px 24px 32px; background: var(--bg);
+}
+.tab-pane { display: none; }
+.tab-pane.on { display: block; }
+
+.prog-card {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 14px 16px; margin-bottom: 12px;
+  display: grid; grid-template-columns: 90px 1fr 100px;
+  align-items: center; gap: 14px;
+}
+.prog-card .name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.prog-card .name .small {
+  font-weight: 400; color: var(--ink-3); font-size: 11.5px;
+  display: block; margin-top: 2px;
+}
+.prog-card .bar {
+  height: 8px; background: rgba(45,49,66,.06);
+  border-radius: 4px; overflow: hidden; position: relative;
+}
+.prog-card .fill { height: 100%; border-radius: 4px; transition: width .5s ease; }
+.prog-card .target {
+  position: absolute; top: -2px; bottom: -2px;
+  width: 2px; background: var(--ink); opacity: .8;
+}
+.prog-card .input-cell {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+}
+.prog-card .input-cell .l { font-size: 11px; color: var(--ink-3); }
+.prog-card .input-cell input {
+  width: 78px; padding: 5px 8px; text-align: right;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  font: inherit; font-variant-numeric: tabular-nums; font-weight: 600;
+  background: var(--surface);
+}
+
+.strategy p {
+  font-size: 13px; line-height: 1.7; color: var(--ink); margin: 0 0 14px;
+  background: var(--surface); border: 1px solid var(--line-soft);
+  padding: 14px 16px; border-radius: var(--r-md);
+}
+.strategy .pill {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .3px; margin-right: 6px;
+}
+.strategy .task-list { list-style: none; padding: 0; margin: 0; }
+.strategy .task-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px;
+}
+.strategy .task-list li:last-child { border: 0; }
+.strategy .task-list input[type=checkbox] { margin-top: 4px; accent-color: var(--ink); }
+
+.note textarea {
+  width: 100%; min-height: 90px;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--surface); padding: 10px 12px;
+  font: inherit; font-size: 13px; resize: vertical;
+}
+.note textarea:focus { outline: none; border-color: var(--ink-3); }
+.note .meta { font-size: 11px; color: var(--ink-3); margin-top: 4px; }
+
+.float-bar {
+  position: fixed; bottom: 18px; right: 22px;
+  display: flex; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 8px; box-shadow: var(--shadow-md); z-index: 50;
+}
+.float-bar .btn { font-size: 12px; }
+
+.empty { text-align: center; padding: 40px 20px; color: var(--ink-3); font-size: 13px; }
+.footer { text-align: center; padding: 28px 0 0; font-size: 11.5px; color: var(--ink-3); }
+
+@media (max-width: 720px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .subj-grid { grid-template-columns: repeat(2, 1fr); }
+  .topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .topbar-actions { width: 100%; }
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #D9D2BE; }
+
+@media print {
+  .float-bar, .topbar-actions, .toolbar { display: none; }
+  .drawer, .overlay { display: none; }
+  body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <h1>高二(5)班 · 英语学习仪表盘</h1>
+      <p class="sub">40 名学生 · 12 周个性化计划 · 高考目标 138 分 · 数据自动保存于本机浏览器</p>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn" id="exportBtn">导出 JSON</button>
+      <button class="btn" id="importBtn">导入</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none">
+      <button class="btn" id="resetBtn" title="恢复初始数据">重置</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <div class="row">
+    <div class="panel">
+      <h2>分数段分布 <span class="meta" id="distMeta"></span></h2>
+      <p class="help">以 4 个分数段锚定高考目标切线 · 颜色对应学生 Tier</p>
+      <div class="dist" id="dist"></div>
+    </div>
+    <div class="panel">
+      <h2>听 / 读 / 写 / 词 四项分项达标率 <span class="meta">目标线 80%</span></h2>
+      <p class="help">教师调整数据后实时重算 · 基于原始成绩表</p>
+      <div class="subj-grid" id="subjGrid"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="panel">
+      <h2>学生弱项分布 <span class="meta">诊断 → 自动分组</span></h2>
+      <p class="help">写作 25 名(62.5%)是班级最大短板,可针对该群体统一加餐</p>
+      <div class="weak" id="weakGrid"></div>
+    </div>
+    <div class="panel">
+      <h2>本周班级进度 <span class="meta">汇总教师填入的完成度</span></h2>
+      <p class="help">每位学生在抽屉内填写听 / 读 / 写 / 词 完成百分比 · 此处显示班级均值</p>
+      <div class="subj-grid" id="classProgGrid"></div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" class="search" id="searchInput" placeholder="搜索 姓名 / ID / 弱项...">
+    <div class="seg" id="tierFilter">
+      <button data-tier="all" class="on">全部 40</button>
+      <button data-tier="A+">A+ 卓越</button>
+      <button data-tier="A">A 优秀</button>
+      <button data-tier="B">B 潜力</button>
+      <button data-tier="C">C 提升</button>
+    </div>
+    <div class="sort">
+      排序
+      <select id="sortSelect">
+        <option value="score-desc">分数 ↓</option>
+        <option value="score-asc">分数 ↑</option>
+        <option value="target-desc">目标 ↓</option>
+        <option value="gap-desc">差距 ↓</option>
+        <option value="name">姓名</option>
+      </select>
+    </div>
+    <div style="flex:1"></div>
+    <div style="font-size:11.5px;color:var(--ink-3);">
+      提示:单击单元格进入编辑 · 点击行空白处打开详情
+    </div>
+  </div>
+
+  <div class="roster-wrap">
+    <table class="roster" id="roster">
+      <thead>
+        <tr>
+          <th>ID</th><th>姓名</th><th>Tier</th><th>总分</th><th>目标</th><th>差距</th>
+          <th>词汇</th><th>听力</th><th>阅读</th><th>写作</th><th>主攻</th><th>周进度</th>
+        </tr>
+      </thead>
+      <tbody id="rosterBody"></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    数据来源:成绩表1.xlsx · 单文件 HTML · 编辑实时保存到 localStorage · 班级仪表盘 v1
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="d-head">
+    <button class="close" id="closeDrawer" aria-label="关闭">×</button>
+    <div class="d-title">
+      <div class="d-avatar" id="dAvatar"></div>
+      <div class="d-meta">
+        <div class="name" id="dName">—</div>
+        <div class="row">
+          <span id="dTier" class="tier-pill"></span>
+          <span id="dWeak" class="weak-pill"></span>
+          <span style="font-size:11.5px;color:var(--ink-3)" id="dId"></span>
+        </div>
+      </div>
+    </div>
+    <div class="d-score" id="dScore"></div>
+  </div>
+  <div class="d-tabs">
+    <button data-tab="progress" class="on">学习进度</button>
+    <button data-tab="strategy">提升策略</button>
+    <button data-tab="note">教师备注</button>
+  </div>
+  <div class="d-body">
+    <div class="tab-pane on" data-pane="progress">
+      <p style="font-size:12.5px;color:var(--ink-3);margin:0 0 12px;">
+        调整每科当前完成度 (0-100%)· 进度条上竖线为该科目标位置
+      </p>
+      <div id="dProgress"></div>
+      <p style="font-size:12.5px;color:var(--ink-3);margin:18px 0 10px;">12 周计划里程碑</p>
+      <div id="dMilestones" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
+    </div>
+    <div class="tab-pane" data-pane="strategy">
+      <div class="strategy" id="dStrategy"></div>
+    </div>
+    <div class="tab-pane note" data-pane="note">
+      <div style="margin-bottom:18px;">
+        <label style="font-size:13px;font-weight:600;color:var(--ink);">教师备注</label>
+        <textarea id="dNote" placeholder="记录与该学生的最近沟通、家长反馈、心理状态、个别化调整建议..."></textarea>
+        <div class="meta">自动保存 · 关闭抽屉即写入</div>
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:600;color:var(--ink);display:block;margin-bottom:8px;">本周任务清单 (可勾选)</label>
+        <ul class="task-list" id="dTasks"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="float-bar">
+  <button class="btn primary" id="exportFloat">导出</button>
+  <button class="btn" id="importFloat">导入</button>
+  <button class="btn" id="resetFloat">重置</button>
+</div>
+
+<script>
+'use strict';
+
+const STORAGE_KEY = 'class_dashboard_v1';
+const ORIGINAL = [{"id": "S01", "name": "何丽", "tier": "B", "score": 123, "target": 131, "vocab": 4643, "vocab_t": 5500, "L_cur": 23, "L_t": 28, "L_max": 30, "R_cur": 31, "R_t": 35, "R_max": 40, "W_cur": 16, "W_t": 20, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S02", "name": "杨明", "tier": "A", "score": 130, "target": 138, "vocab": 3350, "vocab_t": 5500, "L_cur": 25, "L_t": 30, "L_max": 30, "R_cur": 35, "R_t": 40, "R_max": 40, "W_cur": 20, "W_t": 24, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S03", "name": "王强", "tier": "B", "score": 123, "target": 134, "vocab": 3017, "vocab_t": 5500, "L_cur": 23, "L_t": 29, "L_max": 30, "R_cur": 32, "R_t": 37, "R_max": 40, "W_cur": 17, "W_t": 20, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S04", "name": "杨洋", "tier": "B", "score": 124, "target": 135, "vocab": 5043, "vocab_t": 5500, "L_cur": 20, "L_t": 25, "L_max": 30, "R_cur": 32, "R_t": 37, "R_max": 40, "W_cur": 16, "W_t": 20, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S05", "name": "郑磊", "tier": "A", "score": 125, "target": 135, "vocab": 4617, "vocab_t": 5500, "L_cur": 22, "L_t": 27, "L_max": 30, "R_cur": 31, "R_t": 35, "R_max": 40, "W_cur": 19, "W_t": 22, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S06", "name": "王刚", "tier": "A", "score": 129, "target": 140, "vocab": 5227, "vocab_t": 5500, "L_cur": 25, "L_t": 30, "L_max": 30, "R_cur": 33, "R_t": 38, "R_max": 40, "W_cur": 19, "W_t": 22, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S07", "name": "罗洋", "tier": "A+", "score": 144, "target": 150, "vocab": 5373, "vocab_t": 5500, "L_cur": 29, "L_t": 30, "L_max": 30, "R_cur": 37, "R_t": 40, "R_max": 40, "W_cur": 23, "W_t": 25, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S08", "name": "黄涛", "tier": "B", "score": 122, "target": 133, "vocab": 3406, "vocab_t": 5500, "L_cur": 20, "L_t": 26, "L_max": 30, "R_cur": 30, "R_t": 34, "R_max": 40, "W_cur": 20, "W_t": 24, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S09", "name": "刘平", "tier": "B", "score": 122, "target": 130, "vocab": 3665, "vocab_t": 5500, "L_cur": 23, "L_t": 28, "L_max": 30, "R_cur": 31, "R_t": 35, "R_max": 40, "W_cur": 17, "W_t": 20, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S10", "name": "李娜", "tier": "B", "score": 111, "target": 120, "vocab": 3417, "vocab_t": 5500, "L_cur": 18, "L_t": 24, "L_max": 30, "R_cur": 24, "R_t": 28, "R_max": 40, "W_cur": 14, "W_t": 18, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S11", "name": "孙艳", "tier": "A", "score": 129, "target": 138, "vocab": 2907, "vocab_t": 5500, "L_cur": 24, "L_t": 30, "L_max": 30, "R_cur": 35, "R_t": 39, "R_max": 40, "W_cur": 18, "W_t": 22, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S12", "name": "吴军", "tier": "B", "score": 110, "target": 118, "vocab": 3708, "vocab_t": 5500, "L_cur": 17, "L_t": 22, "L_max": 30, "R_cur": 26, "R_t": 30, "R_max": 40, "W_cur": 16, "W_t": 19, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S13", "name": "张静", "tier": "B", "score": 122, "target": 132, "vocab": 3649, "vocab_t": 5500, "L_cur": 21, "L_t": 27, "L_max": 30, "R_cur": 29, "R_t": 34, "R_max": 40, "W_cur": 19, "W_t": 23, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S14", "name": "吴勇", "tier": "A", "score": 131, "target": 142, "vocab": 4124, "vocab_t": 5500, "L_cur": 27, "L_t": 30, "L_max": 30, "R_cur": 33, "R_t": 38, "R_max": 40, "W_cur": 19, "W_t": 22, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S15", "name": "朱军", "tier": "A", "score": 131, "target": 140, "vocab": 2833, "vocab_t": 5500, "L_cur": 23, "L_t": 28, "L_max": 30, "R_cur": 31, "R_t": 36, "R_max": 40, "W_cur": 18, "W_t": 21, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S16", "name": "吴娜", "tier": "B", "score": 124, "target": 135, "vocab": 3863, "vocab_t": 5500, "L_cur": 22, "L_t": 28, "L_max": 30, "R_cur": 30, "R_t": 35, "R_max": 40, "W_cur": 18, "W_t": 22, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S17", "name": "郑勇", "tier": "A", "score": 127, "target": 137, "vocab": 3137, "vocab_t": 5500, "L_cur": 20, "L_t": 26, "L_max": 30, "R_cur": 31, "R_t": 36, "R_max": 40, "W_cur": 19, "W_t": 23, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S18", "name": "刘强", "tier": "B", "score": 124, "target": 135, "vocab": 4279, "vocab_t": 5500, "L_cur": 23, "L_t": 29, "L_max": 30, "R_cur": 32, "R_t": 37, "R_max": 40, "W_cur": 16, "W_t": 20, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S19", "name": "吴超", "tier": "C", "score": 108, "target": 117, "vocab": 4610, "vocab_t": 5500, "L_cur": 16, "L_t": 21, "L_max": 30, "R_cur": 26, "R_t": 30, "R_max": 40, "W_cur": 13, "W_t": 17, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S20", "name": "马勇", "tier": "A", "score": 132, "target": 143, "vocab": 4256, "vocab_t": 5500, "L_cur": 23, "L_t": 29, "L_max": 30, "R_cur": 33, "R_t": 37, "R_max": 40, "W_cur": 18, "W_t": 21, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S21", "name": "孙静", "tier": "B", "score": 110, "target": 118, "vocab": 3215, "vocab_t": 5500, "L_cur": 19, "L_t": 24, "L_max": 30, "R_cur": 27, "R_t": 31, "R_max": 40, "W_cur": 17, "W_t": 20, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S22", "name": "徐秀英", "tier": "B", "score": 111, "target": 119, "vocab": 4401, "vocab_t": 5500, "L_cur": 16, "L_t": 22, "L_max": 30, "R_cur": 25, "R_t": 29, "R_max": 40, "W_cur": 13, "W_t": 16, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S23", "name": "李勇", "tier": "B", "score": 124, "target": 133, "vocab": 2976, "vocab_t": 5500, "L_cur": 22, "L_t": 28, "L_max": 30, "R_cur": 28, "R_t": 32, "R_max": 40, "W_cur": 19, "W_t": 22, "W_max": 25, "weakness": "Reading", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S24", "name": "高涛", "tier": "B", "score": 121, "target": 129, "vocab": 4011, "vocab_t": 5500, "L_cur": 23, "L_t": 28, "L_max": 30, "R_cur": 31, "R_t": 35, "R_max": 40, "W_cur": 16, "W_t": 20, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S25", "name": "朱平", "tier": "A", "score": 128, "target": 136, "vocab": 3215, "vocab_t": 5500, "L_cur": 23, "L_t": 28, "L_max": 30, "R_cur": 28, "R_t": 33, "R_max": 40, "W_cur": 17, "W_t": 21, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S26", "name": "吴杰", "tier": "C", "score": 109, "target": 117, "vocab": 4261, "vocab_t": 5500, "L_cur": 17, "L_t": 22, "L_max": 30, "R_cur": 25, "R_t": 29, "R_max": 40, "W_cur": 14, "W_t": 18, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S27", "name": "吴涛", "tier": "A+", "score": 136, "target": 145, "vocab": 2847, "vocab_t": 5500, "L_cur": 27, "L_t": 30, "L_max": 30, "R_cur": 32, "R_t": 37, "R_max": 40, "W_cur": 21, "W_t": 24, "W_max": 25, "weakness": "Reading", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S28", "name": "胡强", "tier": "B", "score": 123, "target": 134, "vocab": 4829, "vocab_t": 5500, "L_cur": 20, "L_t": 25, "L_max": 30, "R_cur": 30, "R_t": 34, "R_max": 40, "W_cur": 18, "W_t": 21, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S29", "name": "王芳", "tier": "B", "score": 121, "target": 130, "vocab": 3784, "vocab_t": 5500, "L_cur": 22, "L_t": 27, "L_max": 30, "R_cur": 29, "R_t": 33, "R_max": 40, "W_cur": 20, "W_t": 24, "W_max": 25, "weakness": "Reading", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S30", "name": "胡涛", "tier": "B", "score": 114, "target": 122, "vocab": 4782, "vocab_t": 5500, "L_cur": 15, "L_t": 20, "L_max": 30, "R_cur": 24, "R_t": 29, "R_max": 40, "W_cur": 13, "W_t": 16, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S31", "name": "吴秀英", "tier": "A", "score": 129, "target": 138, "vocab": 4830, "vocab_t": 5500, "L_cur": 22, "L_t": 28, "L_max": 30, "R_cur": 30, "R_t": 34, "R_max": 40, "W_cur": 20, "W_t": 23, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S32", "name": "张伟", "tier": "A", "score": 125, "target": 136, "vocab": 3827, "vocab_t": 5500, "L_cur": 24, "L_t": 29, "L_max": 30, "R_cur": 29, "R_t": 33, "R_max": 40, "W_cur": 16, "W_t": 20, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S33", "name": "林强", "tier": "B", "score": 114, "target": 124, "vocab": 4371, "vocab_t": 5500, "L_cur": 18, "L_t": 24, "L_max": 30, "R_cur": 24, "R_t": 29, "R_max": 40, "W_cur": 14, "W_t": 17, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S34", "name": "杨丽", "tier": "B", "score": 114, "target": 125, "vocab": 5076, "vocab_t": 5500, "L_cur": 16, "L_t": 21, "L_max": 30, "R_cur": 24, "R_t": 28, "R_max": 40, "W_cur": 13, "W_t": 16, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S35", "name": "马涛", "tier": "B", "score": 123, "target": 132, "vocab": 3299, "vocab_t": 5500, "L_cur": 24, "L_t": 30, "L_max": 30, "R_cur": 30, "R_t": 35, "R_max": 40, "W_cur": 18, "W_t": 22, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S36", "name": "高娜", "tier": "B", "score": 122, "target": 131, "vocab": 3327, "vocab_t": 5500, "L_cur": 20, "L_t": 25, "L_max": 30, "R_cur": 32, "R_t": 37, "R_max": 40, "W_cur": 16, "W_t": 20, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S37", "name": "徐娟", "tier": "B", "score": 111, "target": 120, "vocab": 4492, "vocab_t": 5500, "L_cur": 17, "L_t": 22, "L_max": 30, "R_cur": 26, "R_t": 31, "R_max": 40, "W_cur": 16, "W_t": 19, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S38", "name": "陈娟", "tier": "B", "score": 124, "target": 132, "vocab": 4376, "vocab_t": 5500, "L_cur": 23, "L_t": 29, "L_max": 30, "R_cur": 31, "R_t": 35, "R_max": 40, "W_cur": 19, "W_t": 23, "W_max": 25, "weakness": "Writing", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S39", "name": "高刚", "tier": "B", "score": 121, "target": 131, "vocab": 3930, "vocab_t": 5500, "L_cur": 21, "L_t": 26, "L_max": 30, "R_cur": 32, "R_t": 36, "R_max": 40, "W_cur": 18, "W_t": 22, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}, {"id": "S40", "name": "郑涛", "tier": "B", "score": 121, "target": 132, "vocab": 5217, "vocab_t": 5500, "L_cur": 21, "L_t": 26, "L_max": 30, "R_cur": 30, "R_t": 35, "R_max": 40, "W_cur": 19, "W_t": 22, "W_max": 25, "weakness": "Listening", "progress_L": 0, "progress_R": 0, "progress_W": 0, "progress_V": 0, "note": ""}];
+let STUDENTS = loadStudents();
+
+function loadStudents() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(ORIGINAL));
+    const data = JSON.parse(raw);
+    if (Array.isArray(data) && data.length === ORIGINAL.length) return data;
+    return JSON.parse(JSON.stringify(ORIGINAL));
+  } catch(e) {
+    return JSON.parse(JSON.stringify(ORIGINAL));
+  }
+}
+function saveStudents() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(STUDENTS)); } catch(e) {}
+}
+
+const STRATEGIES = {
+  Writing: {lab:'写作优先', advice:[
+    '每周完成 2 篇应用文 + 1 篇读后续写',
+    '背诵高分模板句型,灵活套用而非死记',
+    '建立"高级句型本",每次写作前调取',
+    '同伴互评 + 教师面批,关注表达逻辑和词汇丰富度',
+    '针对 25 分满分的评分项(内容/结构/语言)分别扣分统计'
+  ]},
+  Listening: {lab:'听力优先', advice:[
+    '每晚 30 分钟精听:VOA 慢速 / BBC 6 Minute English',
+    '数字、年份、专有名词专项训练(常见失分点)',
+    '材料复述训练:听后复述主旨和细节',
+    '长对话、短文各 2 篇/周,逐步提速',
+    '建立"听力生词本":听懂后立即复习'
+  ]},
+  Reading: {lab:'阅读优先', advice:[
+    '每天 1 篇高考真题阅读(阅读理解 + 七选五 + 完形)',
+    '长难句结构分析:画出主干,修饰成分单独提',
+    '语境词义推断训练:利用上下文而非依赖词汇表',
+    '限时训练:阅读理解 ≤ 8 分钟/篇',
+    '建立"阅读生词本":按话题归类复习'
+  ]}
+};
+
+function render() {
+  renderKPI();
+  renderDist();
+  renderSubj();
+  renderWeak();
+  renderClassProgress();
+  renderRoster();
+  saveStudents();
+}
+
+function renderKPI() {
+  const n = STUDENTS.length;
+  const scores = STUDENTS.map(s => s.score);
+  const avg = (scores.reduce((a,b)=>a+b,0) / n).toFixed(1);
+  const sorted = [...scores].sort((a,b)=>a-b);
+  const median = sorted[Math.floor(n/2)];
+  const max = Math.max(...scores), min = Math.min(...scores);
+  const target = 138;
+  const mean = scores.reduce((a,b)=>a+b,0)/n;
+  const variance = scores.reduce((a,b)=>a + (b-mean)**2, 0) / n;
+  const sd = Math.sqrt(variance).toFixed(1);
+  const applus = STUDENTS.filter(s => s.score >= 135).length;
+  const tierAP = STUDENTS.filter(s => s.tier === 'A+').length;
+  const tierA = STUDENTS.filter(s => s.tier === 'A').length;
+  const tierB = STUDENTS.filter(s => s.tier === 'B').length;
+  const tierC = STUDENTS.filter(s => s.tier === 'C').length;
+
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi accent-ap">
+      <div class="label">班级平均</div>
+      <div class="value">${avg}<span class="unit">/ 150</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">中位数</div>
+      <div class="value">${median}<span class="unit">分</span></div>
+    </div>
+    <div class="kpi accent-b">
+      <div class="label">最高 / 最低</div>
+      <div class="value">${max}<span class="unit">/ ${min}</span></div>
+    </div>
+    <div class="kpi accent-a">
+      <div class="label">标准差 σ</div>
+      <div class="value">${sd}<span class="unit">分</span></div>
+    </div>
+    <div class="kpi accent-ap">
+      <div class="label">≥135 (A+ 区)</div>
+      <div class="value">${applus}<span class="unit">/ ${n}</span></div>
+    </div>
+    <div class="kpi accent-c">
+      <div class="label">&lt;115 (C 区)</div>
+      <div class="value">${STUDENTS.filter(s=>s.score<115).length}<span class="unit">人</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">距高考目标</div>
+      <div class="value">${(target - mean).toFixed(1)}<span class="unit">分</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">Tier 人数</div>
+      <div class="value" style="font-size:18px;">${tierAP} · ${tierA} · ${tierB} · ${tierC}</div>
+    </div>
+  `;
+}
+
+function renderDist() {
+  const bands = {'≥135 AP':[], '125-134 A':[], '115-124 B':[], '<115 C':[]};
+  STUDENTS.forEach(s => {
+    if (s.score >= 135) bands['≥135 AP'].push(s);
+    else if (s.score >= 125) bands['125-134 A'].push(s);
+    else if (s.score >= 115) bands['115-124 B'].push(s);
+    else bands['<115 C'].push(s);
+  });
+  const total = STUDENTS.length;
+  const maxN = Math.max(...Object.values(bands).map(b => b.length), 1);
+  const cls = {'≥135 AP':'ap', '125-134 A':'a', '115-124 B':'b', '<115 C':'c'};
+
+  document.getElementById('dist').innerHTML = Object.entries(bands).map(([name, list]) => {
+    const pct = (list.length / total * 100).toFixed(0);
+    const barW = (list.length / maxN * 100).toFixed(0);
+    return `
+      <div class="dist-row ${cls[name]}">
+        <div class="name">${name}</div>
+        <div class="dist-bar"><div class="fill" style="width:${barW}%"></div></div>
+        <div class="count">${list.length} 人</div>
+        <div class="pct">${pct}%</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('distMeta').textContent = `共 ${total} 人`;
+}
+
+function renderSubj() {
+  const total = STUDENTS.length;
+  const sumCur = (k) => STUDENTS.reduce((a,b) => a + b[k], 0);
+  const sumMax = (k) => STUDENTS.reduce((a,b) => a + b[k+'_t'], 0);
+
+  const L = sumCur('L_cur') / sumMax('L');
+  const R = sumCur('R_cur') / sumMax('R');
+  const W = sumCur('W_cur') / sumMax('W');
+  const V = STUDENTS.reduce((a,b) => a + b.vocab, 0) / (5500 * total);
+
+  document.getElementById('subjGrid').innerHTML = `
+    <div class="subj L">
+      <div class="name">听力 Listening</div>
+      <div class="pct">${(L*100).toFixed(1)}%</div>
+      <div class="meta">${sumCur('L_cur')}/${sumMax('L')} 分</div>
+      <div class="bar"><div class="fill" style="width:${(L*100).toFixed(1)}%"></div></div>
+    </div>
+    <div class="subj R">
+      <div class="name">阅读 Reading</div>
+      <div class="pct">${(R*100).toFixed(1)}%</div>
+      <div class="meta">${sumCur('R_cur')}/${sumMax('R')} 分</div>
+      <div class="bar"><div class="fill" style="width:${(R*100).toFixed(1)}%"></div></div>
+    </div>
+    <div class="subj W">
+      <div class="name">写作 Writing</div>
+      <div class="pct">${(W*100).toFixed(1)}%</div>
+      <div class="meta">${sumCur('W_cur')}/${sumMax('W')} 分</div>
+      <div class="bar"><div class="fill" style="width:${(W*100).toFixed(1)}%"></div></div>
+    </div>
+    <div class="subj V">
+      <div class="name">词汇 Vocabulary</div>
+      <div class="pct">${(V*100).toFixed(1)}%</div>
+      <div class="meta">${STUDENTS.reduce((a,b)=>a+b.vocab,0)}/5500 词</div>
+      <div class="bar"><div class="fill" style="width:${(V*100).toFixed(1)}%"></div></div>
+    </div>
+  `;
+}
+
+function renderWeak() {
+  const weak = {'Writing':[], 'Listening':[], 'Reading':[]};
+  STUDENTS.forEach(s => { if (weak[s.weakness]) weak[s.weakness].push(s); });
+  const total = STUDENTS.length;
+  document.getElementById('weakGrid').innerHTML = `
+    <div class="weak-card W">
+      <div class="lab">写作 · Writing</div>
+      <div class="v">${weak.Writing.length}</div>
+      <div class="of">${(weak.Writing.length/total*100).toFixed(1)}% · 班级最大瓶颈</div>
+    </div>
+    <div class="weak-card L">
+      <div class="lab">听力 · Listening</div>
+      <div class="v">${weak.Listening.length}</div>
+      <div class="of">${(weak.Listening.length/total*100).toFixed(1)}%</div>
+    </div>
+    <div class="weak-card R">
+      <div class="lab">阅读 · Reading</div>
+      <div class="v">${weak.Reading.length}</div>
+      <div class="of">${(weak.Reading.length/total*100).toFixed(1)}%</div>
+    </div>
+  `;
+}
+
+function renderClassProgress() {
+  const avg = (k) => {
+    const xs = STUDENTS.map(s => Number(s[k] || 0));
+    return xs.reduce((a,b)=>a+b,0) / xs.length;
+  };
+  const L = avg('progress_L'), R = avg('progress_R'),
+        W = avg('progress_W'), V = avg('progress_V');
+  document.getElementById('classProgGrid').innerHTML = `
+    <div class="subj L">
+      <div class="name">听力进度</div>
+      <div class="pct">${L.toFixed(0)}%</div>
+      <div class="meta">班级平均完成度</div>
+      <div class="bar"><div class="fill" style="width:${L}%"></div></div>
+    </div>
+    <div class="subj R">
+      <div class="name">阅读进度</div>
+      <div class="pct">${R.toFixed(0)}%</div>
+      <div class="meta">班级平均完成度</div>
+      <div class="bar"><div class="fill" style="width:${R}%"></div></div>
+    </div>
+    <div class="subj W">
+      <div class="name">写作进度</div>
+      <div class="pct">${W.toFixed(0)}%</div>
+      <div class="meta">班级平均完成度</div>
+      <div class="bar"><div class="fill" style="width:${W}%"></div></div>
+    </div>
+    <div class="subj V">
+      <div class="name">词汇进度</div>
+      <div class="pct">${V.toFixed(0)}%</div>
+      <div class="meta">班级平均完成度</div>
+      <div class="bar"><div class="fill" style="width:${V}%"></div></div>
+    </div>
+  `;
+}
+
+function progressColor(cur, target) {
+  if (cur >= target * 0.85) return 'var(--good)';
+  if (cur >= target * 0.65) return 'var(--warn)';
+  return 'var(--bad)';
+}
+
+function renderRoster() {
+  const search = document.getElementById('searchInput').value.trim().toLowerCase();
+  const tierBtn = document.querySelector('#tierFilter button.on');
+  const tier = tierBtn ? tierBtn.dataset.tier : 'all';
+  const sort = document.getElementById('sortSelect').value;
+
+  let rows = STUDENTS.filter(s => {
+    if (tier !== 'all' && s.tier !== tier) return false;
+    if (search) {
+      const blob = (s.id + s.name + s.weakness).toLowerCase();
+      if (!blob.includes(search)) return false;
+    }
+    return true;
+  });
+
+  rows.sort((a,b) => {
+    if (sort === 'score-desc') return b.score - a.score;
+    if (sort === 'score-asc') return a.score - b.score;
+    if (sort === 'target-desc') return b.target - a.target;
+    if (sort === 'gap-desc') return (b.target - b.score) - (a.target - a.score);
+    if (sort === 'name') return a.name.localeCompare(b.name);
+    return 0;
+  });
+
+  if (rows.length === 0) {
+    document.getElementById('rosterBody').innerHTML =
+      `<tr><td colspan="12" class="empty">没有匹配的学生</td></tr>`;
+    return;
+  }
+
+  document.getElementById('rosterBody').innerHTML = rows.map(s => {
+    const gap = s.target - s.score;
+    const wkAvg = ((s.progress_L + s.progress_R + s.progress_W + s.progress_V) / 4).toFixed(0);
+    return `
+      <tr data-id="${s.id}">
+        <td class="editable" data-field="id">${s.id}</td>
+        <td class="editable" data-field="name">${s.name}</td>
+        <td class="editable" data-field="tier">
+          <span class="tier-pill ${s.tier.replace('+','P')}">${s.tier}</span>
+        </td>
+        <td class="editable" data-field="score">${s.score}</td>
+        <td class="editable" data-field="target">${s.target}</td>
+        <td>${gap > 0 ? '<span class="gap">+'+gap+'</span>' : '<span class="gap">达成</span>'}</td>
+        <td class="editable" data-field="vocab">${s.vocab}</td>
+        <td class="editable" data-field="L">${s.L_cur}/${s.L_t}</td>
+        <td class="editable" data-field="R">${s.R_cur}/${s.R_t}</td>
+        <td class="editable" data-field="W">${s.W_cur}/${s.W_t}</td>
+        <td><span class="weak-pill ${s.weakness[0]}">${weakLabel(s.weakness)}</span></td>
+        <td><div style="display:flex;align-items:center;gap:6px;">
+          <div style="width:46px;height:6px;background:rgba(45,49,66,.06);border-radius:3px;overflow:hidden">
+            <div style="width:${wkAvg}%;height:100%;background:${progressColor(wkAvg,100)};border-radius:3px"></div>
+          </div>
+          <span style="font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums">${wkAvg}%</span>
+        </div></td>
+      </tr>`;
+  }).join('');
+}
+
+function weakLabel(w) {
+  if (w==='Writing') return '写作';
+  if (w==='Listening') return '听力';
+  if (w==='Reading') return '阅读';
+  return w;
+}
+
+const FIELD_TYPES = {
+  id:      {tag:'input', type:'text'},
+  name:    {tag:'input', type:'text'},
+  tier:    {tag:'select', options: ['A+','A','B','C']},
+  score:   {tag:'input', type:'number', min:0, max:150, step:0.5},
+  target:  {tag:'input', type:'number', min:0, max:150, step:0.5},
+  vocab:   {tag:'input', type:'number', min:0, max:5500, step:50},
+  L:       {tag:'paired'},
+  R:       {tag:'paired'},
+  W:       {tag:'paired'},
+};
+
+let editingCell = null;
+
+document.getElementById('rosterBody').addEventListener('click', e => {
+  if (e.target.closest('td.editing')) return;
+  const cell = e.target.closest('td.editable');
+  if (cell) {
+    if (editingCell) finishEdit(false, editingCell);
+    startEdit(cell);
+    return;
+  }
+  const tr = e.target.closest('tr[data-id]');
+  if (!tr) return;
+  const stu = STUDENTS.find(s => s.id === tr.dataset.id);
+  if (stu) openDrawer(stu);
+});
+
+function startEdit(td) {
+  const tr = td.closest('tr[data-id]');
+  const stu = STUDENTS.find(s => s.id === tr.dataset.id);
+  if (!stu) return;
+  const field = td.dataset.field;
+  const spec = FIELD_TYPES[field];
+  if (!spec) return;
+
+  td.classList.add('editing');
+
+  if (spec.tag === 'select') {
+    const sel = document.createElement('select');
+    spec.options.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt; o.textContent = opt;
+      if (opt === stu[field]) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); sel.blur(); }
+      if (e.key === 'Escape') { e.preventDefault(); td.classList.remove('editing'); td.innerHTML = renderCell(stu, field); editingCell = null; }
+    });
+    sel.addEventListener('change', () => { stu[field] = sel.value; render(); });
+    sel.addEventListener('blur', () => setTimeout(() => finishEdit(true, td), 50));
+    td.textContent = '';
+    td.appendChild(sel);
+    editingCell = td;
+    sel.focus();
+    return;
+  }
+
+  if (spec.tag === 'paired') {
+    const parts = td.textContent.trim().split('/');
+    const cur = parts[0] !== undefined ? parts[0] : '';
+    const tgt = parts[1] !== undefined ? parts[1] : '';
+    td.innerHTML = `
+      <input class="paired" type="number" min="0" max="40" value="${cur}" data-c="c">
+      <span>/</span>
+      <input class="paired" type="number" min="0" max="40" value="${tgt}" data-c="t">
+    `;
+    const inputs = td.querySelectorAll('input.paired');
+    const onKey = e => {
+      if (e.key === 'Enter') { e.preventDefault(); inputs[0].blur(); }
+      if (e.key === 'Escape') { e.preventDefault(); td.classList.remove('editing'); td.innerHTML = renderCell(stu, field); editingCell = null; }
+    };
+    inputs.forEach(i => i.addEventListener('keydown', onKey));
+    inputs[0].addEventListener('blur', () => setTimeout(() => finishEdit(true, td), 50));
+    editingCell = td;
+    inputs[0].focus();
+    inputs[0].select();
+    return;
+  }
+
+  const inp = document.createElement('input');
+  inp.type = spec.type;
+  if (spec.min !== undefined) inp.min = spec.min;
+  if (spec.max !== undefined) inp.max = spec.max;
+  if (spec.step !== undefined) inp.step = spec.step;
+  inp.value = stu[field];
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); inp.blur(); }
+    if (e.key === 'Escape') { e.preventDefault(); td.classList.remove('editing'); td.innerHTML = renderCell(stu, field); editingCell = null; }
+  });
+  inp.addEventListener('blur', () => setTimeout(() => finishEdit(true, td), 50));
+  td.textContent = '';
+  td.appendChild(inp);
+  editingCell = td;
+  inp.focus();
+  inp.select();
+}
+
+function finishEdit(commit, td) {
+  if (!td || !td.isConnected) return;
+  if (!commit) { td.classList.remove('editing'); editingCell = null; return; }
+  const tr = td.closest('tr[data-id]');
+  if (!tr) return;
+  const stu = STUDENTS.find(s => s.id === tr.dataset.id);
+  if (!stu) return;
+  const field = td.dataset.field;
+
+  if (field === 'L' || field === 'R' || field === 'W') {
+    const [cInp, tInp] = td.querySelectorAll('input.paired');
+    if (cInp && tInp) {
+      stu[field + '_cur'] = Number(cInp.value);
+      stu[field + '_t'] = Number(tInp.value);
+    }
+  } else {
+    const inp = td.querySelector('input');
+    if (inp) {
+      let v = inp.value;
+      if (field === 'score' || field === 'target' || field === 'vocab') v = Number(v);
+      stu[field] = v;
+    }
+  }
+  editingCell = null;
+  render();
+}
+
+function renderCell(s, field) {
+  if (field === 'tier') return `<span class="tier-pill ${s.tier.replace('+','P')}">${s.tier}</span>`;
+  if (field === 'L') return `${s.L_cur}/${s.L_t}`;
+  if (field === 'R') return `${s.R_cur}/${s.R_t}`;
+  if (field === 'W') return `${s.W_cur}/${s.W_t}`;
+  return s[field];
+}
+
+function openDrawer(s) {
+  document.getElementById('dAvatar').textContent = s.name.charAt(0);
+  document.getElementById('dName').textContent = s.name;
+  document.getElementById('dId').textContent = s.id;
+  const tier = document.getElementById('dTier');
+  tier.className = 'tier-pill ' + s.tier.replace('+','P');
+  tier.textContent = s.tier;
+  const weak = document.getElementById('dWeak');
+  weak.className = 'weak-pill ' + s.weakness[0];
+  weak.textContent = weakLabel(s.weakness);
+
+  const gap = s.target - s.score;
+  document.getElementById('dScore').innerHTML = `
+    <div class="cell">
+      <div class="l">当前总分</div>
+      <div class="v">${s.score}</div>
+      <div class="g">距目标 -${gap} 分</div>
+    </div>
+    <div class="cell">
+      <div class="l">高考目标</div>
+      <div class="v">${s.target}</div>
+      <div class="g">12 周后预期 ${Math.round(s.target + gap*0.5)}</div>
+    </div>
+    <div class="cell">
+      <div class="l">词汇量</div>
+      <div class="v">${s.vocab}</div>
+      <div class="g">目标 ${s.vocab_t} · 缺 ${s.vocab_t - s.vocab}</div>
+    </div>
+  `;
+
+  renderDrawerProgress(s);
+  renderDrawerStrategy(s);
+  renderDrawerNote(s);
+
+  document.getElementById('drawer').classList.add('on');
+  document.getElementById('overlay').classList.add('on');
+  document.getElementById('drawer').dataset.sid = s.id;
+  document.querySelectorAll('#rosterBody tr.active').forEach(r => r.classList.remove('active'));
+  const row = document.querySelector(`#rosterBody tr[data-id="${s.id}"]`);
+  if (row) row.classList.add('active');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('on');
+  document.getElementById('overlay').classList.remove('on');
+  document.getElementById('drawer').dataset.sid = '';
+  document.querySelectorAll('#rosterBody tr.active').forEach(r => r.classList.remove('active'));
+  saveStudents();
+}
+document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
+document.getElementById('overlay').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !editingCell) closeDrawer();
+});
+
+function renderDrawerProgress(s) {
+  const items = [
+    { name:'听力', field:'progress_L', cur:s.L_cur, tgt:s.L_t, color:'var(--sub-L)' },
+    { name:'阅读', field:'progress_R', cur:s.R_cur, tgt:s.R_t, color:'var(--sub-R)' },
+    { name:'写作', field:'progress_W', cur:s.W_cur, tgt:s.W_t, color:'var(--sub-W)' },
+    { name:'词汇', field:'progress_V', cur:s.vocab, tgt:s.vocab_t, color:'var(--sub-V)' },
+  ];
+  document.getElementById('dProgress').innerHTML = items.map(it => {
+    const pct = Math.min(100, Math.max(0, Number(s[it.field] || 0)));
+    const tgtPct = Math.min(100, Math.round(it.cur / it.tgt * 100));
+    return `
+      <div class="prog-card" style="color:${it.color}">
+        <div class="name">${it.name}<span class="small">当前 ${it.cur} / ${it.tgt}</span></div>
+        <div class="bar">
+          <div class="fill" style="width:${pct}%;background:${it.color}"></div>
+          <div class="target" style="left:${tgtPct}%"></div>
+        </div>
+        <div class="input-cell">
+          <div class="l">本周完成 %</div>
+          <input type="number" min="0" max="100" step="5" data-field="${it.field}" value="${pct}">
+        </div>
+      </div>`;
+  }).join('');
+
+  document.querySelectorAll('#dProgress input').forEach(inp => {
+    inp.addEventListener('input', () => {
+      const sid = document.getElementById('drawer').dataset.sid;
+      const stu = STUDENTS.find(s => s.id === sid);
+      if (!stu) return;
+      stu[inp.dataset.field] = Number(inp.value);
+      const bar = inp.closest('.prog-card').querySelector('.fill');
+      bar.style.width = inp.value + '%';
+      renderClassProgress();
+      renderRoster();
+    });
+  });
+
+  const gap = s.target - s.score;
+  const ms = [
+    { name:'第 4 周', desc:'形成习惯', score: Math.round(s.score + gap*0.15) },
+    { name:'第 8 周', desc:'明显提升', score: Math.round(s.score + gap*0.4) },
+    { name:'第 12 周', desc:'目标达成', score: s.target + Math.round(gap*0.3) },
+  ];
+  document.getElementById('dMilestones').innerHTML = ms.map(m => `
+    <div style="background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:10px 12px;">
+      <div style="font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.5px;">${m.name}</div>
+      <div style="font-size:18px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);margin:2px 0;">${m.score}<span style="font-size:11px;color:var(--ink-3);font-weight:400;"> 分</span></div>
+      <div style="font-size:11px;color:var(--ink-3);">${m.desc}</div>
+    </div>
+  `).join('');
+}
+
+function renderDrawerStrategy(s) {
+  const strat = STRATEGIES[s.weakness] || {lab:'', advice:[]};
+  const tierNote = s.tier === 'A+' ? '培优:高分突破,关注复杂表达与高分亮点' :
+                   s.tier === 'A' ? '优秀:稳定输出,丰富表达细节' :
+                   s.tier === 'B' ? '潜力:四维均衡,集中攻破弱项' :
+                                    '补基:稳扎稳打,降低错误率';
+  const softKey = s.weakness[0];
+  document.getElementById('dStrategy').innerHTML = `
+    <p>
+      <span class="pill" style="background:var(--tier-${s.tier.replace('+','P').toLowerCase()}-soft);">Tier ${s.tier}</span>
+      ${tierNote}
+    </p>
+    <p>
+      <span class="pill" style="background:var(--sub-${softKey}-soft);color:var(--ink-2);">${strat.lab}</span>
+      该生在 <b>${weakLabel(s.weakness)}</b> 上差距最大,以下是该方向的 5 条具体建议:
+    </p>
+    <ul class="task-list">
+      ${strat.advice.map(a => `<li><input type="checkbox"><span>${a}</span></li>`).join('')}
+    </ul>
+    <p style="background:var(--surface-2);border:none;">
+      <b>12 周节奏</b><br>
+      第 1-2 周:评估 + 习惯建立<br>
+      第 3-6 周:薄弱项精练,每周跟进一次<br>
+      第 7-10 周:综合提升 + 真题模拟<br>
+      第 11-12 周:考前冲刺 + 错题复盘
+    </p>
+  `;
+}
+
+function renderDrawerNote(s) {
+  const inp = document.getElementById('dNote');
+  inp.value = s.note || '';
+  inp.oninput = () => {
+    const sid = document.getElementById('drawer').dataset.sid;
+    const stu = STUDENTS.find(s => s.id === sid);
+    if (stu) stu.note = inp.value;
+  };
+  const tasks = (STRATEGIES[s.weakness] || {advice:[]}).advice;
+  document.getElementById('dTasks').innerHTML = tasks.map((a, i) => `
+    <li><input type="checkbox" data-task-idx="${i}"><span>${a}</span></li>
+  `).join('');
+}
+
+document.querySelectorAll('.d-tabs button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.d-tabs button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('on'));
+    document.querySelector(`.tab-pane[data-pane="${b.dataset.tab}"]`).classList.add('on');
+  });
+});
+
+document.querySelectorAll('#tierFilter button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#tierFilter button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    renderRoster();
+  });
+});
+document.getElementById('searchInput').addEventListener('input', renderRoster);
+document.getElementById('sortSelect').addEventListener('change', renderRoster);
+
+function doExport() {
+  const blob = new Blob([JSON.stringify(STUDENTS, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `class_dashboard_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+['exportBtn','exportFloat'].forEach(id => document.getElementById(id).addEventListener('click', doExport));
+
+function doImport() { document.getElementById('importFile').click(); }
+['importBtn','importFloat'].forEach(id => document.getElementById(id).addEventListener('click', doImport));
+document.getElementById('importFile').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      if (!Array.isArray(data) || data.length !== ORIGINAL.length) {
+        alert('JSON 行数不匹配,期望 ' + ORIGINAL.length + ' 行,实得 ' + (data && data.length || 0) + ' 行');
+        return;
+      }
+      STUDENTS = data;
+      saveStudents(); render();
+      alert('已导入 ' + data.length + ' 行学生数据');
+    } catch(e) { alert('解析失败: ' + e.message); }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+});
+
+function doReset() {
+  if (!confirm('确定要恢复原始数据吗?所有修改会丢失。')) return;
+  STUDENTS = JSON.parse(JSON.stringify(ORIGINAL));
+  saveStudents(); render(); closeDrawer();
+}
+['resetBtn','resetFloat'].forEach(id => document.getElementById(id).addEventListener('click', doReset));
+
+render();
+</script>
+</body>
+</html>
