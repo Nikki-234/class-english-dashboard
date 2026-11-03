@@ -461,11 +461,244 @@ button { font-family: inherit; cursor: pointer; }
   .drawer, .overlay { display: none; }
   body { background: #fff; }
 }
+/* ============================================================
+   个人化定制层 — 身份选择 / 角色视图 / 偏好设置
+   ============================================================ */
+
+/* ---- 身份选择幕 ---- */
+.gate {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+}
+.gate.hidden { display: none; }
+.gate-inner {
+  width: 100%; max-width: 720px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 34px 36px;
+}
+.gate h2 {
+  margin: 0 0 4px; font-size: 21px; font-weight: 600;
+  color: var(--ink); letter-spacing: -.5px;
+}
+.gate .lead {
+  margin: 0 0 24px; font-size: 13.5px; color: var(--ink-3); line-height: 1.6;
+}
+.role-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  margin-bottom: 22px;
+}
+@media (max-width: 620px) { .role-grid { grid-template-columns: 1fr; } }
+.role-card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 16px 14px;
+  cursor: pointer;
+  background: var(--surface);
+  transition: border-color .15s, background .15s, transform .05s;
+  text-align: left;
+  font-family: inherit;
+}
+.role-card:hover { border-color: var(--ink-3); background: var(--surface-2); }
+.role-card:active { transform: translateY(1px); }
+.role-card.on { border-color: var(--ink); background: var(--surface-2); }
+.role-card .rname {
+  font-size: 14.5px; font-weight: 600; color: var(--ink);
+  margin-bottom: 3px;
+}
+.role-card .rdesc { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+
+.field-row { margin-bottom: 16px; }
+.field-row label {
+  display: block; font-size: 12.5px; font-weight: 600;
+  color: var(--ink-2); margin-bottom: 6px;
+}
+.field-row select, .field-row input[type="text"] {
+  width: 100%; padding: 9px 12px;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  font: inherit; font-size: 14px; color: var(--ink);
+  background: var(--surface);
+}
+.field-row select:focus, .field-row input:focus {
+  outline: none; border-color: var(--ink-3);
+}
+.gate-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-top: 24px; padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+}
+.gate-foot .hint { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+.btn-lg {
+  padding: 10px 22px; font-size: 14px; border-radius: var(--r-sm);
+  border: 1px solid var(--ink); background: var(--ink); color: var(--bg);
+  white-space: nowrap;
+}
+.btn-lg:hover { background: #1a1d2c; }
+.btn-lg:disabled { opacity: .45; cursor: not-allowed; }
+.link-btn {
+  background: none; border: 0; padding: 0;
+  color: var(--ink-3); font-size: 12.5px; text-decoration: underline;
+}
+.link-btn:hover { color: var(--ink); }
+
+/* ---- 角色横幅 ---- */
+.role-banner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; margin-bottom: 16px;
+  border-radius: var(--r-md);
+  font-size: 12.5px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface);
+}
+.role-banner .tag {
+  padding: 3px 9px; border-radius: 10px;
+  font-size: 11.5px; font-weight: 600;
+  background: var(--surface-2); color: var(--ink-2);
+}
+.role-banner .who { color: var(--ink); font-weight: 600; }
+.role-banner .spacer { flex: 1; }
+.role-banner .btn { padding: 5px 11px; font-size: 12px; }
+
+/* ---- 学生/家长视角的单人卡片 ---- */
+.personal {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 22px 24px;
+  margin-bottom: 14px;
+}
+.personal .p-head {
+  display: flex; align-items: center; gap: 16px;
+  padding-bottom: 18px; margin-bottom: 18px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.personal .p-avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--surface-2); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 25px; font-weight: 600; color: var(--ink);
+  flex-shrink: 0;
+}
+.personal .p-name { font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -.5px; }
+.personal .p-sub { display: flex; gap: 8px; align-items: center; margin-top: 6px; flex-wrap: wrap; }
+.personal .p-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+}
+@media (max-width: 620px) { .personal .p-stats { grid-template-columns: repeat(2, 1fr); } }
+.personal .p-stat {
+  background: var(--surface-2); border-radius: var(--r-sm); padding: 12px 14px;
+}
+.personal .p-stat .l { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .5px; }
+.personal .p-stat .v { font-size: 22px; font-weight: 600; letter-spacing: -1px; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.personal .p-stat .g { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+
+/* ---- 设置面板 ---- */
+.settings {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(420px, 96vw);
+  background: var(--bg); z-index: 150;
+  transform: translateX(100%);
+  transition: transform .28s cubic-bezier(.2,.7,.2,1);
+  box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column;
+}
+.settings.on { transform: translateX(0); }
+.settings-head {
+  padding: 18px 22px 14px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.settings-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: var(--ink); }
+.settings-body { flex: 1; overflow-y: auto; padding: 18px 22px 28px; }
+.set-group { margin-bottom: 24px; }
+.set-group > h4 {
+  margin: 0 0 4px; font-size: 11.5px; font-weight: 600;
+  color: var(--ink-3); text-transform: uppercase; letter-spacing: .6px;
+}
+.set-group .gdesc { font-size: 12px; color: var(--ink-3); margin: 0 0 10px; line-height: 1.5; }
+.set-item {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 9px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 13px; color: var(--ink);
+}
+.set-item:last-child { border-bottom: 0; }
+.set-item .sdesc { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+.switch {
+  position: relative; width: 40px; height: 23px;
+  background: var(--line); border-radius: 12px;
+  cursor: pointer; transition: background .18s; flex-shrink: 0;
+  border: 0; padding: 0;
+}
+.switch::after {
+  content: ''; position: absolute; top: 2.5px; left: 2.5px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; transition: transform .18s;
+  box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+.switch.on { background: var(--ink); }
+.switch.on::after { transform: translateX(17px); }
+.swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.swatch {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer;
+  position: relative; padding: 0;
+}
+.swatch.on { border-color: var(--ink); }
+.swatch.on::after {
+  content: ''; position: absolute; inset: 3px;
+  border-radius: 50%; background: rgba(255,255,255,.55);
+}
+.seg-compact { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
+.seg-compact button {
+  border: 0; background: transparent; padding: 5px 11px;
+  font-size: 12px; color: var(--ink-2); font-weight: 500;
+  border-right: 1px solid var(--line);
+}
+.seg-compact button:last-child { border-right: 0; }
+.seg-compact button.on { background: var(--ink); color: var(--bg); }
+
+/* ---- 隐藏的面板 ---- */
+.panel[hidden], .kpi-grid[hidden], .row[hidden] { display: none !important; }
+
+/* ---- 密度模式 ---- */
+body.density-compact .roster tbody td { padding: 6px 10px; }
+body.density-compact .kpi { padding: 10px 12px; }
+body.density-compact .kpi .value { font-size: 21px; }
+body.density-compact .panel { padding: 14px 16px; }
+body.density-comfortable .roster tbody td { padding: 13px 14px; }
+
+/* ---- 主题变体 ---- */
+body.theme-mint  { --bg:#F3F8F4; --surface-2:#EAF3EC; --line:#DCE9DF; --line-soft:#E7F1EA; }
+body.theme-blue  { --bg:#F4F7FB; --surface-2:#EBF1F8; --line:#DCE5F0; --line-soft:#E6EDF6; }
+body.theme-warm  { --bg:#FBF6EF; --surface-2:#F6EEE2; --line:#EBDFCD; --line-soft:#F1E8DA; }
+body.theme-plain { --bg:#FFFFFF; --surface-2:#F4F4F5; --line:#E4E4E7; --line-soft:#EDEDF0; }
+
+/* ---- Toast ---- */
+.toast {
+  position: fixed; bottom: 76px; left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--ink); color: var(--bg);
+  padding: 10px 18px; border-radius: var(--r-sm);
+  font-size: 13px; z-index: 300;
+  opacity: 0; pointer-events: none;
+  transition: opacity .22s, transform .22s;
+  box-shadow: var(--shadow-md);
+  max-width: 80vw; text-align: center;
+}
+.toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 </style>
 </head>
 <body>
 
-<div class="app">
+<div class="app" id="app" style="display:none">
 
   <div class="topbar">
     <div class="brand">
@@ -476,6 +709,7 @@ button { font-family: inherit; cursor: pointer; }
       <button class="btn" id="exportBtn">导出 JSON</button>
       <button class="btn" id="importBtn">导入</button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
+      <button class="btn" id="settingsBtn">个性化设置</button>
       <button class="btn" id="resetBtn" title="恢复初始数据">重置</button>
     </div>
   </div>
@@ -483,12 +717,12 @@ button { font-family: inherit; cursor: pointer; }
   <div class="kpi-grid" id="kpiGrid"></div>
 
   <div class="row">
-    <div class="panel">
+    <div class="panel" id="panelDist">
       <h2>分数段分布 <span class="meta" id="distMeta"></span></h2>
       <p class="help">以 4 个分数段锚定高考目标切线 · 颜色对应学生 Tier</p>
       <div class="dist" id="dist"></div>
     </div>
-    <div class="panel">
+    <div class="panel" id="panelSubj">
       <h2>听 / 读 / 写 / 词 四项分项达标率 <span class="meta">目标线 80%</span></h2>
       <p class="help">教师调整数据后实时重算 · 基于原始成绩表</p>
       <div class="subj-grid" id="subjGrid"></div>
@@ -496,12 +730,12 @@ button { font-family: inherit; cursor: pointer; }
   </div>
 
   <div class="row">
-    <div class="panel">
+    <div class="panel" id="panelWeak">
       <h2>学生弱项分布 <span class="meta">诊断 → 自动分组</span></h2>
       <p class="help">写作 25 名(62.5%)是班级最大短板,可针对该群体统一加餐</p>
       <div class="weak" id="weakGrid"></div>
     </div>
-    <div class="panel">
+    <div class="panel" id="panelClassProg">
       <h2>本周班级进度 <span class="meta">汇总教师填入的完成度</span></h2>
       <p class="help">每位学生在抽屉内填写听 / 读 / 写 / 词 完成百分比 · 此处显示班级均值</p>
       <div class="subj-grid" id="classProgGrid"></div>
@@ -533,6 +767,7 @@ button { font-family: inherit; cursor: pointer; }
     </div>
   </div>
 
+  <div id="rosterSection">
   <div class="roster-wrap">
     <table class="roster" id="roster">
       <thead>
@@ -543,6 +778,22 @@ button { font-family: inherit; cursor: pointer; }
       </thead>
       <tbody id="rosterBody"></tbody>
     </table>
+  </div>
+
+<!-- 身份选择幕 -->
+<div class="gate" id="gate">
+  <div class="gate-inner">
+    <h2>正在载入…</h2>
+    <p class="lead">请稍候</p>
+  </div>
+</div>
+
+<!-- 角色横幅 -->
+<div class="role-banner" id="roleBanner" hidden></div>
+
+<!-- 个人卡片(学生/家长) -->
+<div id="personalWrap" hidden></div>
+
   </div>
 
   <div class="footer">
@@ -601,6 +852,7 @@ button { font-family: inherit; cursor: pointer; }
 <div class="float-bar">
   <button class="btn primary" id="exportFloat">导出</button>
   <button class="btn" id="importFloat">导入</button>
+  <button class="btn" id="settingsFloat">设置</button>
   <button class="btn" id="resetFloat">重置</button>
 </div>
 
@@ -651,12 +903,14 @@ const STRATEGIES = {
 };
 
 function render() {
-  renderKPI();
-  renderDist();
-  renderSubj();
-  renderWeak();
-  renderClassProgress();
+  const scoped = visibleStudents();
+  renderScopedKPI(scoped);
+  renderScopedDist(scoped);
+  renderScopedSubj(scoped);
+  renderScopedWeak(scoped);
+  renderScopedClassProg(scoped);
   renderRoster();
+  applyNamePrivacy();
   saveStudents();
 }
 
@@ -848,7 +1102,8 @@ function renderRoster() {
   const tier = tierBtn ? tierBtn.dataset.tier : 'all';
   const sort = document.getElementById('sortSelect').value;
 
-  let rows = STUDENTS.filter(s => {
+  const scope = visibleStudents();
+  let rows = scope.filter(s => {
     if (tier !== 'all' && s.tier !== tier) return false;
     if (search) {
       const blob = (s.id + s.name + s.weakness).toLowerCase();
@@ -1179,7 +1434,10 @@ function renderDrawerStrategy(s) {
 
 function renderDrawerNote(s) {
   const inp = document.getElementById('dNote');
-  inp.value = s.note || '';
+  inp.value = (PREFS.showNotes ? (s.note || '') : '');
+  inp.placeholder = PREFS.showNotes
+    ? '记录与该学生的最近沟通、家长反馈、心理状态、个别化调整建议...'
+    : '（当前设置已隐藏教师备注，可在「个性化设置」中开启）';
   inp.oninput = () => {
     const sid = document.getElementById('drawer').dataset.sid;
     const stu = STUDENTS.find(s => s.id === sid);
@@ -1248,7 +1506,677 @@ function doReset() {
 }
 ['resetBtn','resetFloat'].forEach(id => document.getElementById(id).addEventListener('click', doReset));
 
-render();
+/* ============================================================
+   角色范围渲染 — 学生/家长视图只呈现本人的数据
+   ============================================================ */
+
+function renderScopedKPI(list) {
+  const n = list.length;
+  if (!n) { document.getElementById('kpiGrid').innerHTML = ''; return; }
+  const scores = list.map(s => s.score);
+  const avg = (scores.reduce((a,b)=>a+b,0) / n).toFixed(1);
+  const sorted = [...scores].sort((a,b)=>a-b);
+  const median = sorted[Math.floor(n/2)];
+  const max = Math.max(...scores), min = Math.min(...scores);
+  const mean = scores.reduce((a,b)=>a+b,0)/n;
+  const variance = scores.reduce((a,b)=>a + (b-mean)**2, 0) / n;
+  const sd = Math.sqrt(variance).toFixed(1);
+  const applus = list.filter(s => s.score >= 135).length;
+  const tierAP = list.filter(s => s.tier === 'A+').length;
+  const tierA = list.filter(s => s.tier === 'A').length;
+  const tierB = list.filter(s => s.tier === 'B').length;
+  const tierC = list.filter(s => s.tier === 'C').length;
+  const showT = PREFS.showTargets;
+  const showG = PREFS.showGaps;
+
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi accent-ap">
+      <div class="label">${n>1?'班级平均':'当前分数'}</div>
+      <div class="value">${avg}<span class="unit">/ 150</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">中位数</div>
+      <div class="value">${median}<span class="unit">分</span></div>
+    </div>
+    <div class="kpi accent-b">
+      <div class="label">最高 / 最低</div>
+      <div class="value">${max}<span class="unit">/ ${min}</span></div>
+    </div>
+    <div class="kpi accent-a">
+      <div class="label">标准差 σ</div>
+      <div class="value">${sd}<span class="unit">分</span></div>
+    </div>
+    <div class="kpi accent-ap">
+      <div class="label">≥135 (A+ 区)</div>
+      <div class="value">${applus}<span class="unit">/ ${n}</span></div>
+    </div>
+    <div class="kpi accent-c">
+      <div class="label">&lt;115 (C 区)</div>
+      <div class="value">${list.filter(s=>s.score<115).length}<span class="unit">人</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">距高考目标</div>
+      <div class="value">${showG ? (138 - mean).toFixed(1) : '—'}<span class="unit">${showG?'分':''}</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">Tier 人数</div>
+      <div class="value" style="font-size:18px;">${tierAP} · ${tierA} · ${tierB} · ${tierC}</div>
+    </div>
+  `;
+}
+
+function renderScopedDist(list) {
+  const bands = {'≥135 AP':[], '125-134 A':[], '115-124 B':[], '<115 C':[]};
+  list.forEach(s => {
+    if (s.score >= 135) bands['≥135 AP'].push(s);
+    else if (s.score >= 125) bands['125-134 A'].push(s);
+    else if (s.score >= 115) bands['115-124 B'].push(s);
+    else bands['<115 C'].push(s);
+  });
+  const total = list.length;
+  const maxN = Math.max(...Object.values(bands).map(b => b.length), 1);
+  const cls = {'≥135 AP':'ap', '125-134 A':'a', '115-124 B':'b', '<115 C':'c'};
+  document.getElementById('dist').innerHTML = Object.entries(bands).map(([name, l]) => {
+    const pct = (l.length / total * 100).toFixed(0);
+    const barW = (l.length / maxN * 100).toFixed(0);
+    return `
+      <div class="dist-row ${cls[name]}">
+        <div class="name">${name}</div>
+        <div class="dist-bar"><div class="fill" style="width:${barW}%"></div></div>
+        <div class="count">${l.length} 人</div>
+        <div class="pct">${pct}%</div>
+      </div>`;
+  }).join('');
+  const meta = document.getElementById('distMeta');
+  if (meta) meta.textContent = `共 ${total} 人`;
+}
+
+function renderScopedSubj(list) {
+  const total = list.length;
+  const sumCur = k => list.reduce((a,b)=>a+b[k], 0);
+  const sumMax = k => list.reduce((a,b)=>a+b[k+'_t'], 0);
+  const L = sumMax('L') ? sumCur('L_cur')/sumMax('L') : 0;
+  const R = sumMax('R') ? sumCur('R_cur')/sumMax('R') : 0;
+  const W = sumMax('W') ? sumCur('W_cur')/sumMax('W') : 0;
+  const V = list.reduce((a,b)=>a+b.vocab,0) / (5500*total);
+  document.getElementById('subjGrid').innerHTML = `
+    <div class="subj L"><div class="name">听力 Listening</div>
+      <div class="pct">${(L*100).toFixed(1)}%</div>
+      <div class="meta">${sumCur('L_cur')}/${sumMax('L')} 分</div>
+      <div class="bar"><div class="fill" style="width:${(L*100).toFixed(1)}%"></div></div></div>
+    <div class="subj R"><div class="name">阅读 Reading</div>
+      <div class="pct">${(R*100).toFixed(1)}%</div>
+      <div class="meta">${sumCur('R_cur')}/${sumMax('R')} 分</div>
+      <div class="bar"><div class="fill" style="width:${(R*100).toFixed(1)}%"></div></div></div>
+    <div class="subj W"><div class="name">写作 Writing</div>
+      <div class="pct">${(W*100).toFixed(1)}%</div>
+      <div class="meta">${sumCur('W_cur')}/${sumMax('W')} 分</div>
+      <div class="bar"><div class="fill" style="width:${(W*100).toFixed(1)}%"></div></div></div>
+    <div class="subj V"><div class="name">词汇 Vocabulary</div>
+      <div class="pct">${(V*100).toFixed(1)}%</div>
+      <div class="meta">${list.reduce((a,b)=>a+b.vocab,0)}/5500 词</div>
+      <div class="bar"><div class="fill" style="width:${(V*100).toFixed(1)}%"></div></div></div>
+  `;
+}
+
+function renderScopedWeak(list) {
+  const weak = {'Writing':[], 'Listening':[], 'Reading':[]};
+  list.forEach(s => { if (weak[s.weakness]) weak[s.weakness].push(s); });
+  const total = list.length;
+  document.getElementById('weakGrid').innerHTML = `
+    <div class="weak-card W"><div class="lab">写作 · Writing</div>
+      <div class="v">${weak.Writing.length}</div>
+      <div class="of">${(weak.Writing.length/total*100).toFixed(1)}%${total>3?' · 班级最大瓶颈':''}</div></div>
+    <div class="weak-card L"><div class="lab">听力 · Listening</div>
+      <div class="v">${weak.Listening.length}</div>
+      <div class="of">${(weak.Listening.length/total*100).toFixed(1)}%</div></div>
+    <div class="weak-card R"><div class="lab">阅读 · Reading</div>
+      <div class="v">${weak.Reading.length}</div>
+      <div class="of">${(weak.Reading.length/total*100).toFixed(1)}%</div></div>
+  `;
+}
+
+function renderScopedClassProg(list) {
+  const avg = k => {
+    const xs = list.map(s => Number(s[k]||0));
+    return xs.reduce((a,b)=>a+b,0)/xs.length;
+  };
+  const L = avg('progress_L'), R = avg('progress_R'),
+        W = avg('progress_W'), V = avg('progress_V');
+  document.getElementById('classProgGrid').innerHTML = `
+    <div class="subj L"><div class="name">听力进度</div>
+      <div class="pct">${L.toFixed(0)}%</div><div class="meta">${totalLabel(list)}平均完成度</div>
+      <div class="bar"><div class="fill" style="width:${L}%"></div></div></div>
+    <div class="subj R"><div class="name">阅读进度</div>
+      <div class="pct">${R.toFixed(0)}%</div><div class="meta">${totalLabel(list)}平均完成度</div>
+      <div class="bar"><div class="fill" style="width:${R}%"></div></div></div>
+    <div class="subj W"><div class="name">写作进度</div>
+      <div class="pct">${W.toFixed(0)}%</div><div class="meta">${totalLabel(list)}平均完成度</div>
+      <div class="bar"><div class="fill" style="width:${W}%"></div></div></div>
+    <div class="subj V"><div class="name">词汇进度</div>
+      <div class="pct">${V.toFixed(0)}%</div><div class="meta">${totalLabel(list)}平均完成度</div>
+      <div class="bar"><div class="fill" style="width:${V}%"></div></div></div>
+  `;
+}
+function totalLabel(list) {
+  return list.length > 1 ? '班级' : '';
+}
+
+/* ============================================================
+   个人化定制层 JS
+   - 身份档案 (每用户独立存储)
+   - 角色视图 (老师 / 学生 / 家长)
+   - 偏好设置 (面板显隐 / 主题 / 密度)
+   - 状态分享链接
+   ============================================================ */
+
+const PROFILE_KEY = 'class_dashboard_profile_v1';
+const PREFS_KEY   = 'class_dashboard_prefs_v1';
+const SHARED_KEY  = 'class_dashboard_shared_v1';
+
+const DEFAULT_PREFS = {
+  panels: {
+    kpi: true, dist: true, subj: true, weak: true, classProg: true, roster: true
+  },
+  theme: 'warm',
+  density: 'normal',
+  showTargets: true,
+  showGaps: true,
+  showNotes: true,
+  anonymousNames: false,
+};
+
+let buildGateRef = null;
+let PROFILE = null;   // {role:'teacher'|'student'|'parent', name, studentId}
+let PREFS = loadPrefs();
+
+function loadPrefs() {
+  try {
+    const raw = localStorage.getItem(PREFS_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_PREFS));
+    const p = JSON.parse(raw);
+    return Object.assign(JSON.parse(JSON.stringify(DEFAULT_PREFS)), p, {
+      panels: Object.assign({}, DEFAULT_PREFS.panels, p.panels || {})
+    });
+  } catch(e) {
+    return JSON.parse(JSON.stringify(DEFAULT_PREFS));
+  }
+}
+function savePrefs() {
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(PREFS)); } catch(e) {}
+}
+
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem(PROFILE_KEY);
+    if (!raw) return null;
+    const p = JSON.parse(raw);
+    if (p && p.role) return p;
+  } catch(e) {}
+  return null;
+}
+function saveProfile(p) {
+  PROFILE = p;
+  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch(e) {}
+}
+
+/* ---------- 共享状态:从 URL hash 恢复 ---------- */
+function readSharedState() {
+  const h = location.hash;
+  if (!h || h.length < 2) return null;
+  try {
+    const json = decodeURIComponent(escape(atob(h.slice(1))));
+    return JSON.parse(json);
+  } catch(e) {
+    return null;
+  }
+}
+function writeSharedState(obj) {
+  const json = JSON.stringify(obj);
+  const b64 = btoa(unescape(encodeURIComponent(json)));
+  history.replaceState(null, '', '#' + b64);
+}
+
+/* ---------- 视图渲染 ---------- */
+function applyTheme() {
+  const themes = ['warm','mint','blue','plain'];
+  const t = themes.includes(PREFS.theme) ? PREFS.theme : 'warm';
+  document.body.classList.remove('theme-mint','theme-blue','theme-plain');
+  if (t !== 'warm') document.body.classList.add('theme-' + t);
+  document.body.classList.remove('density-compact','density-comfortable');
+  if (PREFS.density === 'compact') document.body.classList.add('density-compact');
+  if (PREFS.density === 'comfortable') document.body.classList.add('density-comfortable');
+}
+
+function applyPanelVisibility() {
+  const map = {
+    kpi: 'kpiGrid',
+    dist: 'panelDist',
+    subj: 'panelSubj',
+    weak: 'panelWeak',
+    classProg: 'panelClassProg',
+    roster: 'rosterSection',
+  };
+  Object.entries(map).forEach(([key, id]) => {
+    const el = document.getElementById(id);
+    if (el) el.hidden = !PREFS.panels[key];
+  });
+  // 隐藏整行时,若该行只剩一个 panel 也不留空行
+  document.querySelectorAll('.row').forEach(row => {
+    const visible = Array.from(row.children).some(c => !c.hidden);
+    row.hidden = !visible;
+  });
+}
+
+function visibleStudents() {
+  if (!PROFILE) return STUDENTS;
+  if (PROFILE.role === 'student' || PROFILE.role === 'parent') {
+    const one = STUDENTS.find(s => s.id === PROFILE.studentId);
+    return one ? [one] : STUDENTS;
+  }
+  return STUDENTS;
+}
+
+function renderRoleBanner() {
+  const el = document.getElementById('roleBanner');
+  if (!el) return;
+  if (!PROFILE) { el.hidden = true; return; }
+  el.hidden = false;
+  const roleLabel = {teacher:'老师', student:'学生', parent:'家长'}[PROFILE.role];
+  const focus = PROFILE.role === 'teacher'
+    ? '可查看并编辑全班数据'
+    : `当前查看：${PROFILE.studentName || '—'}`;
+  el.innerHTML = `
+    <span class="tag">${roleLabel}视图</span>
+    <span class="who">${PROFILE.name || '未命名'}</span>
+    <span style="color:var(--ink-3)">${focus}</span>
+    <span class="spacer"></span>
+    <button class="btn" id="switchProfileBtn">切换身份</button>
+    <button class="btn" id="settingsBtn2">个性化设置</button>
+  `;
+  document.getElementById('switchProfileBtn').onclick = () => {
+    localStorage.removeItem(PROFILE_KEY);
+    PROFILE = null;
+    document.getElementById('gate').classList.remove('hidden');
+    document.getElementById('app').style.display = 'none';
+  };
+  document.getElementById('settingsBtn2').onclick = openSettings;
+}
+
+function renderPersonalCard() {
+  const wrap = document.getElementById('personalWrap');
+  if (!wrap) return;
+  if (!PROFILE || PROFILE.role === 'teacher') { wrap.innerHTML = ''; wrap.hidden = true; return; }
+  const s = STUDENTS.find(x => x.id === PROFILE.studentId);
+  if (!s) { wrap.innerHTML = ''; wrap.hidden = true; return; }
+  wrap.hidden = false;
+  const gap = s.target - s.score;
+  const wk = ((s.progress_L + s.progress_R + s.progress_W + s.progress_V) / 4).toFixed(0);
+  wrap.innerHTML = `
+    <div class="personal">
+      <div class="p-head">
+        <div class="p-avatar">${s.name.charAt(0)}</div>
+        <div>
+          <div class="p-name">${s.name}</div>
+          <div class="p-sub">
+            <span class="tier-pill ${s.tier.replace('+','P')}">Tier ${s.tier}</span>
+            <span class="weak-pill ${s.weakness[0]}">主攻${weakLabel(s.weakness)}</span>
+            <span style="font-size:11.5px;color:var(--ink-3)">${s.id}</span>
+          </div>
+        </div>
+      </div>
+      <div class="p-stats">
+        <div class="p-stat">
+          <div class="l">当前总分</div>
+          <div class="v">${s.score}</div>
+          <div class="g">目标 ${PREFS.showTargets ? s.target : '—'}</div>
+        </div>
+        <div class="p-stat">
+          <div class="l">距目标</div>
+          <div class="v" style="color:${gap>0?'var(--bad)':'var(--good)'}">${gap>0?'-'+gap:'达成'}</div>
+          <div class="g">${gap>0?'还需提升':'已达标'}</div>
+        </div>
+        <div class="p-stat">
+          <div class="l">词汇量</div>
+          <div class="v">${s.vocab}</div>
+          <div class="g">${PREFS.showTargets ? '目标 '+s.vocab_t : ''}</div>
+        </div>
+        <div class="p-stat">
+          <div class="l">本周进度</div>
+          <div class="v" style="color:${progressColor(wk,100)}">${wk}%</div>
+          <div class="g">听读写词均值</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function applyNamePrivacy() {
+  if (!PREFS.anonymousNames) return;
+  const map = {};
+  STUDENTS.forEach((s, i) => {
+    map[s.id] = '学生' + String(i+1).padStart(2,'0');
+  });
+  document.querySelectorAll('#rosterBody tr').forEach(tr => {
+    const id = tr.dataset.id;
+    const cell = tr.querySelector('td[data-field="name"]');
+    if (cell && map[id]) cell.textContent = map[id];
+  });
+  const dn = document.getElementById('dName');
+  if (dn && PROFILE && PROFILE.studentId && map[PROFILE.studentId]) {
+    dn.textContent = map[PROFILE.studentId];
+  }
+}
+
+/* ---------- 身份选择幕 ---------- */
+function buildGate() {
+  const gate = document.getElementById('gate');
+  const state = { role: 'teacher', studentId: '', name: '' };
+
+  function studentsForPick() {
+    return STUDENTS.map(s => `${s.id} · ${s.name}`).join('\n');
+  }
+
+  function render() {
+    const isStudent = state.role === 'student' || state.role === 'parent';
+    const options = STUDENTS.map(s =>
+      `<option value="${s.id}" ${s.id===state.studentId?'selected':''}>${s.name}（${s.id}）· Tier ${s.tier}</option>`
+    ).join('');
+    gate.innerHTML = `
+      <div class="gate-inner">
+        <h2>选择你的身份</h2>
+        <p class="lead">每个人首次打开时创建自己的档案，设置只保存在你自己的浏览器里，互不影响。</p>
+
+        <div class="role-grid">
+          <button class="role-card ${state.role==='teacher'?'on':''}" data-role="teacher">
+            <div class="rname">我是老师</div>
+            <div class="rdesc">查看并编辑全班 40 名学生的成绩与学习进度</div>
+          </button>
+          <button class="role-card ${state.role==='student'?'on':''}" data-role="student">
+            <div class="rname">我是学生</div>
+            <div class="rdesc">查看并更新自己的学习记录与各科进度</div>
+          </button>
+          <button class="role-card ${state.role==='parent'?'on':''}" data-role="parent">
+            <div class="rname">我是家长</div>
+            <div class="rdesc">查看孩子的成绩详情、弱项诊断与学习进度</div>
+          </button>
+        </div>
+
+        ${isStudent ? `
+        <div class="field-row">
+          <label>选择${state.role==='student'?'本人':'孩子'}是谁</label>
+          <select id="gateStudent">${options}</select>
+        </div>` : ''}
+
+        <div class="field-row">
+          <label>你的称呼（可留空）</label>
+          <input type="text" id="gateName" placeholder="例如：李老师 / 王小明 / 张女士" value="${state.name}">
+        </div>
+
+        <div class="gate-foot">
+          <div class="hint">
+            ${isStudent
+              ? '档案保存在本机浏览器；换设备打开请用右下角「导出」保存，再在新设备「导入」。'
+              : '可在顶部「个性化设置」中调整显示哪些面板、主题配色与数据密度。'}
+          </div>
+          <button class="btn-lg" id="gateStart" ${isStudent && !state.studentId ? 'disabled' : ''}>进入仪表盘</button>
+        </div>
+      </div>
+    `;
+
+    gate.querySelectorAll('.role-card').forEach(btn => {
+      btn.onclick = () => { state.role = btn.dataset.role; render(); };
+    });
+    const sel = gate.querySelector('#gateStudent');
+    if (sel) sel.onchange = e => { state.studentId = e.target.value; render(); };
+    const nm = gate.querySelector('#gateName');
+    if (nm) nm.oninput = e => { state.name = e.target.value; };
+    gate.querySelector('#gateStart').onclick = () => {
+      const sid = state.studentId || (STUDENTS[0] && STUDENTS[0].id);
+      const stu = STUDENTS.find(s => s.id === sid);
+      saveProfile({
+        role: state.role,
+        name: state.name.trim(),
+        studentId: (state.role === 'student' || state.role === 'parent') ? sid : '',
+        studentName: stu ? stu.name : ''
+      });
+      enterApp();
+    };
+  }
+  render();
+  return { render };
+}
+
+/* ---------- 设置面板 ---------- */
+function openSettings() {
+  const el = document.getElementById('settings');
+  const body = el.querySelector('.settings-body');
+  const themes = [
+    ['warm','暖色（默认）'],['mint','薄荷'],['blue','天蓝'],['plain','纯白']
+  ];
+  const panelLabels = {
+    kpi:'KPI 数字条', dist:'分数段分布', subj:'四项分项达标率',
+    weak:'弱项分布', classProg:'本周班级进度', roster:'学生名单表'
+  };
+  body.innerHTML = `
+    <div class="set-group">
+      <h4>显示哪些面板</h4>
+      <p class="gdesc">关掉不需要的面板，页面会更聚焦。</p>
+      ${Object.entries(panelLabels).map(([k,label]) => `
+        <div class="set-item">
+          <div><div>${label}</div></div>
+          <button class="switch ${PREFS.panels[k]?'on':''}" data-panel="${k}"></button>
+        </div>`).join('')}
+    </div>
+
+    <div class="set-group">
+      <h4>数据细节</h4>
+      <p class="gdesc">控制表格里显示哪些信息。</p>
+      <div class="set-item">
+        <div><div>显示目标分</div><div class="sdesc">学生/家长视图下是否显示目标</div></div>
+        <button class="switch ${PREFS.showTargets?'on':''}" data-flag="showTargets"></button>
+      </div>
+      <div class="set-item">
+        <div><div>显示差距</div><div class="sdesc">显示距目标的分数差</div></div>
+        <button class="switch ${PREFS.showGaps?'on':''}" data-flag="showGaps"></button>
+      </div>
+      <div class="set-item">
+        <div><div>显示教师备注</div><div class="sdesc">在抽屉中展示备注内容</div></div>
+        <button class="switch ${PREFS.showNotes?'on':''}" data-flag="showNotes"></button>
+      </div>
+      <div class="set-item">
+        <div><div>姓名匿名化</div><div class="sdesc">把所有姓名替换为「学生01」编号</div></div>
+        <button class="switch ${PREFS.anonymousNames?'on':''}" data-flag="anonymousNames"></button>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <h4>外观</h4>
+      <p class="gdesc">主题配色与信息密度。</p>
+      <div class="set-item">
+        <div><div>主题</div></div>
+        <div class="swatch-row">
+          ${themes.map(([k,label]) => `<button class="swatch ${PREFS.theme===k?'on':''}" data-theme="${k}" title="${label}" style="background:${
+            {warm:'#FBF8F2', mint:'#F3F8F4', blue:'#F4F7FB', plain:'#FFFFFF'}[k]
+          };box-shadow:inset 0 0 0 1px ${k==='plain'?'#d4d4d8':'transparent'}"></button>`).join('')}
+        </div>
+      </div>
+      <div class="set-item">
+        <div><div>信息密度</div><div class="sdesc">紧凑适合大屏投影，宽松适合笔记本</div></div>
+        <div class="seg-compact">
+          ${['compact','normal','comfortable'].map(d =>
+            `<button class="${PREFS.density===d?'on':''}" data-density="${d}">${
+              {compact:'紧凑',normal:'标准',comfortable:'宽松'}[d]}</button>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <h4>我的档案</h4>
+      <p class="gdesc">身份与称呼。</p>
+      <div class="field-row">
+        <label>称呼</label>
+        <input type="text" id="setName" value="${PROFILE ? (PROFILE.name||'') : ''}" placeholder="你的名字">
+      </div>
+      <div class="set-item">
+        <div><div>身份</div><div class="sdesc">${
+          {teacher:'老师', student:'学生', parent:'家长'}[PROFILE?PROFILE.role:'teacher']}</div></div>
+        <button class="btn" id="setSwitchRole">切换身份</button>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <h4>数据</h4>
+      <p class="gdesc">所有改动保存在本机浏览器。换设备请用导出/导入。</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn" id="setExport">导出 JSON</button>
+        <button class="btn" id="setImport">导入</button>
+        <button class="btn" id="setShare">复制当前状态链接</button>
+        <button class="btn" id="setReset">恢复原始数据</button>
+      </div>
+    </div>
+  `;
+
+  body.querySelectorAll('[data-panel]').forEach(b => {
+    b.onclick = () => {
+      const k = b.dataset.panel;
+      PREFS.panels[k] = !PREFS.panels[k];
+      savePrefs(); applyPanelVisibility(); b.classList.toggle('on', PREFS.panels[k]);
+    };
+  });
+  body.querySelectorAll('[data-flag]').forEach(b => {
+    b.onclick = () => {
+      const k = b.dataset.flag;
+      PREFS[k] = !PREFS[k];
+      savePrefs(); b.classList.toggle('on', PREFS[k]); refresh();
+    };
+  });
+  body.querySelectorAll('[data-theme]').forEach(b => {
+    b.onclick = () => {
+      PREFS.theme = b.dataset.theme;
+      savePrefs(); applyTheme();
+      body.querySelectorAll('[data-theme]').forEach(x => x.classList.toggle('on', x.dataset.theme===PREFS.theme));
+    };
+  });
+  body.querySelectorAll('[data-density]').forEach(b => {
+    b.onclick = () => {
+      PREFS.density = b.dataset.density;
+      savePrefs(); applyTheme();
+      body.querySelectorAll('[data-density]').forEach(x => x.classList.toggle('on', x.dataset.density===PREFS.density));
+    };
+  });
+  const nm = body.querySelector('#setName');
+  if (nm) nm.oninput = e => {
+    if (PROFILE) { PROFILE.name = e.target.value; saveProfile(PROFILE); renderRoleBanner(); }
+  };
+  body.querySelector('#setSwitchRole').onclick = () => {
+    localStorage.removeItem(PROFILE_KEY);
+    closeSettings();
+    PROFILE = null;
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('gate').classList.remove('hidden');
+  };
+  body.querySelector('#setExport').onclick = doExport;
+  body.querySelector('#setImport').onclick = doImport;
+  body.querySelector('#setReset').onclick = doReset;
+  body.querySelector('#setShare').onclick = () => {
+    const payload = {
+      students: STUDENTS,
+      profile: PROFILE,
+      prefs: PREFS,
+    };
+    writeSharedState(payload);
+    const url = location.href;
+    navigator.clipboard.writeText(url).then(
+      () => toast('已复制链接，打开后会自动恢复该状态'),
+      () => toast('无法自动复制，链接已写入地址栏')
+    );
+  };
+
+  el.classList.add('on');
+}
+function closeSettings() {
+  document.getElementById('settings').classList.remove('on');
+}
+
+/* ---------- Toast ---------- */
+let toastTimer = null;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('on'), 2600);
+}
+
+/* ---------- 启动 ---------- */
+function enterApp() {
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('app').style.display = '';
+  applyTheme();
+  applyPanelVisibility();
+  refresh();
+  renderRoleBanner();
+}
+
+function refresh() {
+  const scoped = visibleStudents();
+  renderPersonalCard();
+  renderRoleBanner();
+  renderScopedKPI(scoped);
+  renderScopedDist(scoped);
+  renderScopedSubj(scoped);
+  renderScopedWeak(scoped);
+  renderScopedClassProg(scoped);
+  renderRoster();
+  applyNamePrivacy();
+}
+
+
+/* ---------- 启动流程 ---------- */
+(function boot() {
+  // 1. 检查 URL 共享状态
+  const shared = readSharedState();
+  if (shared) {
+    if (shared.students && Array.isArray(shared.students)) {
+      STUDENTS = shared.students;
+      saveStudents();
+    }
+    if (shared.prefs) {
+      PREFS = Object.assign(JSON.parse(JSON.stringify(DEFAULT_PREFS)), shared.prefs,
+                            {panels: Object.assign({}, DEFAULT_PREFS.panels, shared.prefs.panels||{})});
+      savePrefs();
+    }
+    if (shared.profile) { PROFILE = shared.profile; saveProfile(PROFILE); }
+  }
+
+  // 2. 没有档案则显示身份选择幕
+  if (!PROFILE) {
+    const gate = buildGate();
+    buildGateRef = gate;
+    document.getElementById('gate').classList.remove('hidden');
+    document.getElementById('app').style.display = 'none';
+  } else {
+    enterApp();
+  }
+
+  // 3. 绑定设置按钮
+  document.getElementById('settingsBtn').onclick = openSettings;
+  document.getElementById('settingsFloat').onclick = openSettings;
+  document.getElementById('closeSettings').onclick = closeSettings;
+})();
 </script>
+
+<!-- 个性化设置面板 -->
+<div class="settings" id="settings">
+  <div class="settings-head">
+    <h3>个性化设置</h3>
+    <button class="close" id="closeSettings" aria-label="关闭" style="position:static;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:17px;line-height:1;">×</button>
+  </div>
+  <div class="settings-body"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 </body>
 </html>
