@@ -4,14 +4,16 @@
 >
 > | 通道 | 链接 | 说明 |
 > |---|---|---|
-> | **推荐 · jsDelivr 固定版本** | **https://cdn.jsdelivr.net/gh/Nikki-234/class-english-dashboard@7fc4bca4b3521e34cf800575ab24bcde5595bef7/index.html** | 国内访问稳定，锁定 commit 不会拿到旧缓存 |
-> | jsDelivr 备用节点 | https://gcore.jsdelivr.net/gh/Nikki-234/class-english-dashboard@7fc4bca4b3521e34cf800575ab24bcde5595bef7/index.html | 另一个 CDN 节点 |
-> | GitHub Pages（官方） | https://nikki-234.github.io/class-english-dashboard/ | 海外网络访问正常 |
-> | 仓库源码 | https://github.com/Nikki-234/class-english-dashboard | |
+> | **GitHub Pages（唯一在线入口）** | **https://nikki-234.github.io/class-english-dashboard/** | 返回 `text/html`，浏览器直接渲染 |
+> | 仓库源码 | https://github.com/Nikki-234/class-english-dashboard | 查看 / 克隆 / 生成器代码 |
 >
 > 页面为**单文件 HTML**，教师可直接编辑数据、追踪每个学生的学习进度。
 >
-> **为什么推荐 jsDelivr 固定版本？** `github.io` 在部分国内网络下不稳定（会超时），而 jsDelivr 是 GitHub 官方认可的 CDN，线路通畅。链接里锁定 commit 哈希，确保任何时候打开都是最新版，不会读到尚未刷新的旧缓存。
+> **关于访问稳定性**
+>
+> - `github.io` 在部分国内网络下会超时（`github.com` 主站同理）。若打不开，请换网络环境或使用代理。
+> - **jsDelivr / raw.githubusercontent 不能作为网页入口**——这些服务对仓库里的 `.html` 文件统一返回 `content-type: text/plain`，浏览器会直接显示 HTML 源码而不是渲染页面。它们只适合下载文件。
+> - 离线可用的替代方案：仓库 `index.html` 即完整页面，下载后双击打开即可，功能与线上一致。
 
 一个面向英语教师的**单文件 HTML 班级学情仪表盘生成工具**：准备好成绩表 xlsx，运行一条命令，即可生成功能完整的仪表盘网页——教师用浏览器打开即可编辑数据、追踪每个学生的学习进度。
 
